@@ -589,8 +589,47 @@
     }
 
     /* ================ SECTIONS ================ */
-    .section { display: none; }
+    .section { display: none; position: relative; }
     .section.active { display: block; animation: scrollUnfold 0.35s ease; }
+    .section-lock-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100; padding: 2rem;
+      border-radius: var(--radius);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .section-lock-card {
+      background: var(--card-bg);
+      border: 1px solid var(--gray-200);
+      border-top: 3px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 3rem;
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      animation: scrollUnfold 0.4s ease;
+    }
+    .section-lock-icon {
+      font-size: 2.8rem;
+      margin-bottom: 0.75rem;
+    }
+    .section-lock-title {
+      font-family: var(--font);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--label);
+      margin-bottom: 0.5rem;
+    }
+    .section-lock-desc {
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--secondary-label);
+      line-height: 1.7;
+    }
 
     @keyframes scrollUnfold {
       0% { opacity: 0; transform: translateY(8px) scale(0.98); }
@@ -1275,6 +1314,7 @@
       {id:'summary',label:'Summary'},
     ];
 
+    const LOCKED_SECTIONS = ['vitals', '24h', 'summary'];
     let currentSection = 'patient';
     let formData = {};
     let db = null;
@@ -2906,9 +2946,26 @@
 
     function showSection(id) {
       const sections = document.querySelectorAll('.section');
-      sections.forEach(s => s.style.display = 'none');
+      sections.forEach(s => {
+        s.style.display = 'none';
+        s.querySelector('.section-lock-overlay')?.remove();
+      });
       const el = document.getElementById('sec-'+id);
-      if(el) el.style.display = 'block';
+      if (el) {
+        if (LOCKED_SECTIONS.includes(id)) {
+          el.style.display = 'block';
+          const overlay = document.createElement('div');
+          overlay.className = 'section-lock-overlay';
+          overlay.innerHTML = `<div class="section-lock-card">
+            <div class="section-lock-icon">🔒</div>
+            <div class="section-lock-title">Access Restricted</div>
+            <div class="section-lock-desc">You do not have permission to access this section of data.</div>
+          </div>`;
+          el.appendChild(overlay);
+        } else {
+          el.style.display = 'block';
+        }
+      }
       currentSection = id;
       document.querySelectorAll('.nav-btn').forEach((btn,i)=>{
         btn.classList.toggle('active', SECTIONS[i].id===id);
