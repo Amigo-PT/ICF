@@ -262,10 +262,9 @@
 
     /* ================ APP CONTAINER ================ */
     .app-container {
-      max-width: 1440px; margin: 0 auto;
       display: grid;
-      grid-template-columns: 280px 1fr;
-      min-height: 100vh;
+      grid-template-columns: 300px 1fr;
+      height: 100vh;
     }
     @media (max-width: 900px) {
       .app-container { grid-template-columns: 1fr; }
@@ -274,87 +273,328 @@
     /* ================ SIDEBAR ================ */
     .sidebar {
       background: var(--card-bg);
-      padding: 20px 16px;
-      display: flex; flex-direction: column; gap: 12px;
+      padding: 16px 14px;
+      display: flex; flex-direction: column; gap: 10px;
       border-right: 1px solid var(--gray-200);
       position: relative;
+      min-width: 280px;
+      height: 100vh;
+      overflow: hidden;
     }
     .sidebar::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: #0891b2;
+      background: linear-gradient(90deg, #0891b2, #3b82f6);
     }
     .sidebar-header {
       display: flex; align-items: center;
       justify-content: space-between;
-      padding: 4px 4px 8px;
-      border-bottom: 1px solid var(--gray-200);
+      padding: 0 2px 6px;
     }
     .sidebar-header h3 {
       font-size: 13px; font-weight: 700;
-      color: var(--label); letter-spacing: 1px;
+      color: var(--label); letter-spacing: 0.5px;
       text-transform: uppercase;
       font-family: var(--font);
     }
     .count-badge {
-      background: #0891b2;
-      color: #fff; font-size: 11px; font-weight: 700;
-      padding: 2px 10px; border-radius: 10px;
-      min-width: 22px; text-align: center;
+      background: linear-gradient(135deg, #0891b2, #06b6d4);
+      color: #fff; font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 10px;
+      min-width: 20px; text-align: center;
+      box-shadow: 0 1px 3px rgba(8,145,178,0.3);
+    }
+    .search-wrapper {
+      position: relative;
+    }
+    .search-wrapper .search-icon {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px; color: var(--gray-400);
+      pointer-events: none;
+      transition: color 0.15s;
     }
     .search-field {
-      width: 100%; padding: 9px 12px;
-      border: 1px solid var(--gray-200);
-      border-radius: 8px;
+      width: 100%; padding: 9px 12px 9px 32px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
       font-size: 13px; font-family: var(--font);
       background: var(--gray-50);
       color: var(--label);
-      transition: all 0.15s;
+      transition: all 0.2s ease;
     }
-    .search-field::placeholder { color: var(--gray-400); }
+    .search-field::placeholder { color: var(--gray-400); font-weight: 400; }
     .search-field:focus {
       outline: none;
       border-color: #0891b2;
       background: #fff;
-      box-shadow: 0 0 0 2px rgba(8,145,178,0.08);
+      box-shadow: 0 0 0 3px rgba(8,145,178,0.08);
     }
+    .search-field:focus ~ .search-icon { color: #0891b2; }
     .patients-list {
       flex: 1; overflow-y: auto;
-      max-height: calc(100vh - 300px);
+      min-height: 0;
+      display: flex; flex-direction: column; gap: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gray-300) transparent;
     }
+    .patients-list::-webkit-scrollbar { width: 4px; }
+    .patients-list::-webkit-scrollbar-track { background: transparent; }
+    .patients-list::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
     .patient-item-sidebar {
       padding: 10px 12px;
-      cursor: pointer; border-radius: 8px;
-      transition: all 0.12s;
+      cursor: pointer; border-radius: 10px;
+      transition: all 0.15s ease;
       position: relative;
-      border: 1px solid transparent;
+      border: 1.5px solid transparent;
+      display: flex; align-items: flex-start; gap: 10px;
+      background: transparent;
     }
-    .patient-item-sidebar:hover { background: var(--gray-50); border-color: var(--gray-200); }
-    .patient-item-sidebar.selected { background: rgba(8,145,178,0.06); border-color: #0891b2; }
-    .patient-item-sidebar .name {
+    .patient-item-sidebar:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-200);
+      transform: translateX(2px);
+    }
+    .patient-item-sidebar.selected {
+      background: linear-gradient(135deg, rgba(8,145,178,0.06), rgba(59,130,246,0.04));
+      border-color: #0891b2;
+      box-shadow: 0 1px 4px rgba(8,145,178,0.1);
+    }
+    .patient-item-sidebar.selected::before {
+      content: '';
+      position: absolute; left: -14px; top: 8px; bottom: 8px;
+      width: 3px; border-radius: 0 3px 3px 0;
+      background: linear-gradient(180deg, #0891b2, #3b82f6);
+    }
+    .patient-avatar {
+      width: 36px; height: 36px; min-width: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .patient-info {
+      flex: 1; min-width: 0; padding-right: 24px;
+    }
+    .patient-info .name {
       font-weight: 600; font-size: 13px;
-      color: var(--label); padding-right: 30px;
+      color: var(--label);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.3;
     }
-    .patient-item-sidebar .meta {
-      font-size: 11px;
-      color: var(--gray-400);
+    .patient-info .meta {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+      margin-top: 3px;
+    }
+    .patient-info .meta .case-id {
+      font-size: 11px; color: var(--gray-400);
+      font-weight: 500;
+    }
+    .patient-info .meta .dot {
+      font-size: 8px; color: var(--gray-300);
+    }
+    .patient-info .meta .date {
+      font-size: 10px; color: var(--gray-400);
+      font-weight: 500;
+    }
+    .patient-info .meta .eval-count {
+      font-size: 9px; font-weight: 600;
+      background: rgba(8,145,178,0.1); color: #0891b2;
+      padding: 1px 6px; border-radius: 6px;
+    }
+    .patient-info .diagnosis {
+      font-size: 11px; color: var(--gray-500);
       margin-top: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 180px;
     }
     .patient-item-sidebar .delete-btn {
-      position: absolute; top: 8px; right: 8px;
+      position: absolute; top: 10px; right: 8px;
       background: transparent; border: none;
-      cursor: pointer; font-size: 13px;
-      color: var(--gray-400); padding: 4px;
+      cursor: pointer; font-size: 14px;
+      color: var(--gray-300); padding: 4px 5px;
       border-radius: 6px; opacity: 0;
-      transition: all 0.12s;
+      transition: all 0.15s ease;
     }
     .patient-item-sidebar:hover .delete-btn { opacity: 1; }
-    .patient-item-sidebar .delete-btn:hover { color: var(--danger); background: var(--danger-bg); }
+    .patient-item-sidebar .delete-btn:hover {
+      color: var(--danger); background: var(--danger-bg);
+      transform: scale(1.1);
+    }
     .no-patients {
-      text-align: center; padding: 40px 16px;
+      text-align: center; padding: 32px 16px;
       color: var(--gray-400); font-size: 13px; line-height: 1.7;
+    }
+    .no-patients .empty-icon {
+      font-size: 32px; margin-bottom: 8px;
+      opacity: 0.5;
+    }
+    .sidebar-actions {
+      display: flex; gap: 6px;
+      flex-shrink: 0;
+    }
+    .sidebar-actions .btn-action {
+      flex: 1; font-size: 11px; padding: 7px 6px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px; cursor: pointer;
+      font-family: var(--font); font-weight: 500;
+      background: #fff; color: var(--gray-600);
+      transition: all 0.15s ease;
+      display: inline-flex; align-items: center; justify-content: center; gap: 3px;
+    }
+    .sidebar-actions .btn-action:hover {
+      border-color: var(--gray-300);
+      background: var(--gray-50);
+      color: var(--label);
+    }
+    .sidebar-actions .btn-action.primary {
+      background: linear-gradient(135deg, #0891b2, #06b6d4);
+      color: #fff; border-color: transparent;
+      box-shadow: 0 1px 3px rgba(8,145,178,0.25);
+    }
+    .sidebar-actions .btn-action.primary:hover {
+      box-shadow: 0 2px 6px rgba(8,145,178,0.35);
+      transform: translateY(-1px);
+    }
+    .sidebar-actions .btn-action.sync {
+      background: var(--sf-purple); color: #fff; border-color: transparent;
+    }
+    .sidebar-actions .btn-action.sync:hover { opacity: 0.9; }
+    .sidebar-actions .btn-action.pull {
+      background: var(--sf-green); color: #fff; border-color: transparent;
+    }
+    .sidebar-actions .btn-action.pull:hover { opacity: 0.9; }
+
+    /* ================ BODY PAIN MAP ================ */
+    .pain-map-container {
+      display: flex; gap: 0; align-items: stretch;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+    .pain-map-body {
+      flex: 1; display: flex; gap: 0; align-items: stretch; justify-content: center;
+      padding: 20px 24px;
+      background: linear-gradient(180deg, rgba(8,145,178,0.03) 0%, transparent 100%);
+      border-right: 1px solid var(--gray-200);
+    }
+    .pain-map-view {
+      text-align: center; position: relative;
+      padding: 0 16px;
+    }
+    .pain-map-view:first-child {
+      border-right: 1px dashed var(--gray-200);
+    }
+    .pain-map-view .view-label {
+      font-size: 10px; font-weight: 700; color: var(--gray-400);
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+    .pain-map-svg {
+      width: 180px; height: 440px;
+      cursor: crosshair;
+    }
+    .pain-map-svg .body-outline {
+      fill: #e2e8f0; stroke: #94a3b8; stroke-width: 1.2;
+      transition: all 0.3s;
+    }
+    .pain-map-svg .body-region {
+      cursor: crosshair;
+      transition: fill 0.25s ease, stroke 0.2s, filter 0.2s;
+    }
+    .pain-map-svg .body-region:hover {
+      fill: rgba(8,145,178,0.18) !important;
+      stroke: #0891b2; stroke-width: 1.2;
+      filter: drop-shadow(0 0 4px rgba(8,145,178,0.3));
+    }
+    .pain-map-svg .body-region.selected {
+      stroke: rgba(0,0,0,0.35); stroke-width: 1.5;
+      filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));
+    }
+    .pain-map-svg .body-line {
+      stroke: #cbd5e1; stroke-width: 0.6; fill: none;
+      stroke-dasharray: 2 2; opacity: 0.5;
+    }
+    .pain-scale-panel {
+      width: 240px; min-width: 240px; flex-shrink: 0;
+      padding: 20px 16px;
+      display: flex; flex-direction: column;
+      background: rgba(255,255,255,0.5);
+    }
+    .pain-scale-panel .panel-title {
+      font-size: 12px; font-weight: 700; color: var(--label);
+      margin-bottom: 8px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .pain-scale-btns {
+      display: flex; flex-direction: column; gap: 3px;
+      margin-bottom: 14px;
+    }
+    .pain-scale-btns button {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border-radius: 8px;
+      border: 1.5px solid var(--gray-200);
+      background: #fff; cursor: pointer;
+      font-size: 11.5px; font-family: var(--font);
+      transition: all 0.15s; color: var(--label);
+    }
+    .pain-scale-btns button:hover {
+      border-color: var(--gray-300);
+      background: var(--gray-50);
+      transform: translateX(2px);
+    }
+    .pain-scale-btns button.active {
+      border-width: 2px; font-weight: 600;
+      transform: translateX(4px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .pain-scale-btns .scale-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      flex-shrink: 0; border: 1.5px solid rgba(0,0,0,0.1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .pain-selected-list {
+      margin-top: auto; padding-top: 12px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .pain-selected-list .list-title {
+      font-size: 10px; font-weight: 700; color: var(--gray-400);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+    .pain-selected-list .pain-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 500;
+      margin: 2px; cursor: default;
+      border: 1px solid rgba(0,0,0,0.06);
+      transition: all 0.15s;
+    }
+    .pain-selected-list .pain-tag:hover {
+      transform: scale(1.03);
+    }
+    .pain-selected-list .pain-tag .tag-x {
+      cursor: pointer; font-weight: 700; opacity: 0.4;
+      margin-left: 2px; font-size: 10px;
+      transition: opacity 0.15s;
+    }
+    .pain-selected-list .pain-tag .tag-x:hover { opacity: 1; }
+    .pain-legend {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      margin-top: 12px; padding-top: 10px;
+      border-top: 1px solid var(--gray-100);
+    }
+    .pain-legend .legend-item {
+      display: flex; align-items: center; gap: 3px;
+      font-size: 9.5px; color: var(--gray-500); font-weight: 500;
+    }
+    .pain-legend .legend-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.08);
     }
 
     /* ================ MAIN CONTENT ================ */
@@ -1075,7 +1315,214 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 6px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+    /* ================ EVALUATION TIMELINE ================ */
+    .eval-timeline {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      animation: scrollUnfold 0.3s ease;
+    }
+    .eval-timeline.visible { display: block; }
+    .eval-timeline-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px; flex-wrap: wrap; gap: 8px;
+    }
+    .eval-timeline-title {
+      font-size: 11px; font-weight: 700;
+      color: var(--secondary-label);
+      text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    .eval-timeline-pills {
+      display: flex; gap: 6px; align-items: center;
+      overflow-x: auto; padding-bottom: 4px;
+      flex-wrap: nowrap;
+    }
+    .eval-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+      border: 1.5px solid var(--gray-200);
+      background: var(--gray-50);
+      color: var(--gray-600);
+      cursor: pointer; transition: all 0.2s;
+      white-space: nowrap; flex-shrink: 0;
+      font-family: var(--font);
+    }
+    .eval-pill:hover {
+      border-color: #0891b2;
+      color: #0891b2;
+      background: rgba(8,145,178,0.04);
+    }
+    .eval-pill.active {
+      background: linear-gradient(135deg, #0891b2, #0e7490);
+      color: #fff;
+      border-color: #0891b2;
+      box-shadow: 0 2px 8px rgba(8,145,178,0.25);
+    }
+    .eval-pill .pill-date {
+      font-size: 10px; opacity: 0.75;
+    }
+    .eval-pill .pill-type {
+      font-weight: 700;
+    }
+    .btn-new-eval {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 11px; font-weight: 700;
+      border: 2px dashed #0891b2;
+      background: rgba(8,145,178,0.04);
+      color: #0891b2;
+      cursor: pointer; transition: all 0.2s;
+      white-space: nowrap; flex-shrink: 0;
+      font-family: var(--font);
+    }
+    .btn-new-eval:hover {
+      background: #0891b2; color: #fff;
+      border-style: solid;
+    }
+    .eval-count-badge {
+      display: inline-flex; align-items: center;
+      background: var(--gray-100); color: var(--gray-500);
+      font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 8px;
+      margin-left: 6px;
+    }
+
+    /* ================ COMPARISON VIEW ================ */
+    .comparison-container {
+      position: relative;
+    }
+    .comparison-selectors {
+      display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .comparison-selectors .form-group { flex: 1; min-width: 200px; }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .comparison-table th {
+      padding: 10px 14px; text-align: left;
+      font-weight: 600; font-size: 10px;
+      color: var(--secondary-label);
+      background: var(--gray-50);
+      border-bottom: 2px solid var(--gray-200);
+      text-transform: uppercase; letter-spacing: 0.6px;
+    }
+    .comparison-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: middle;
+      color: var(--label);
+    }
+    .comparison-table tr:nth-child(even) td { background: var(--gray-50); }
+    .comparison-table tr:last-child td { border-bottom: none; }
+    .comparison-table .cat-header td {
+      background: #0891b2; color: #fff;
+      font-weight: 600; padding: 8px 14px;
+      font-size: 11px;
+    }
+    .comparison-table .delta-cell {
+      font-weight: 700; font-size: 11px;
+      text-align: center;
+    }
+    .delta-improved { color: var(--success); }
+    .delta-worsened { color: var(--danger); }
+    .delta-unchanged { color: var(--gray-400); }
+    .delta-na { color: var(--gray-300); font-weight: 400; }
+    .comparison-table .val-cell {
+      text-align: center; font-weight: 500;
+    }
+    .comparison-table .label-cell {
+      font-weight: 600; color: var(--label);
+      min-width: 180px;
+    }
+    .comparison-empty {
+      text-align: center; padding: 40px 20px;
+      color: var(--gray-400); font-size: 13px;
+    }
+    .comparison-empty-icon {
+      font-size: 48px; margin-bottom: 12px; opacity: 0.3;
+    }
+
+    /* ================ CHARTS ================ */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .chart-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 16px;
+      position: relative;
+    }
+    .chart-card .chart-title {
+      font-size: 13px; font-weight: 600;
+      color: var(--label);
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .chart-card .chart-title .chart-icon {
+      font-size: 16px;
+    }
+    .chart-card canvas {
+      max-height: 240px;
+    }
+    .chart-toggle {
+      display: flex; gap: 6px; margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .chart-toggle button {
+      padding: 6px 14px; border-radius: 8px;
+      border: 1.5px solid var(--gray-200);
+      background: #fff; color: var(--gray-600);
+      font-size: 12px; font-weight: 500;
+      font-family: var(--font); cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .chart-toggle button:hover {
+      border-color: var(--gray-300);
+      background: var(--gray-50);
+    }
+    .chart-toggle button.active {
+      background: linear-gradient(135deg, #0891b2, #06b6d4);
+      color: #fff; border-color: transparent;
+      box-shadow: 0 1px 3px rgba(8,145,178,0.25);
+    }
+    .compare-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 24px; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      border: none; cursor: pointer;
+      font-family: var(--font); transition: all 0.2s;
+    }
+    .compare-btn-primary {
+      background: linear-gradient(135deg, #0891b2, #0e7490);
+      color: #fff; box-shadow: 0 2px 8px rgba(8,145,178,0.25);
+    }
+    .compare-btn-primary:hover {
+      background: linear-gradient(135deg, #0e7490, #155e75);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 600px) {
+      .eval-timeline-pills { flex-wrap: nowrap; }
+      .comparison-selectors { flex-direction: column; }
+    }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <div id="lock-screen" class="lock-screen">
@@ -1163,16 +1610,19 @@
         <h3>Patients</h3>
         <span class="count-badge" id="patients-count">0</span>
       </div>
-      <input type="text" class="search-field" id="patient-search" placeholder="Search by name or ID..." oninput="filterPatients(this.value)">
-      <div id="sync-timestamp" style="font-size:10px;color:var(--sf-gray);padding:2px 4px 6px"></div>
+      <div class="sidebar-actions">
+        <button class="btn-action" onclick="exportAllToJSON()" title="Export All">&#128190; Export</button>
+        <button class="btn-action" onclick="importFromJSON()" title="Import">&#128194; Import</button>
+        <button class="btn-action sync" id="sync-all-btn" onclick="syncAllPatientsToCloud()" title="Sync to Cloud">&#9729; Sync</button>
+        <button class="btn-action pull" id="pull-btn" onclick="fetchAndRefreshFromCloud()" title="Pull from Cloud">&#8681; Pull</button>
+      </div>
+      <div class="search-wrapper">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" class="search-field" id="patient-search" placeholder="Search patients..." oninput="filterPatients(this.value)">
+      </div>
+      <div id="sync-timestamp" style="font-size:10px;color:var(--sf-gray);padding:0 4px 4px"></div>
       <div class="patients-list">
         <div id="patients-sidebar-list"></div>
-      </div>
-      <div style="display:flex;gap:6px;margin-top:4px">
-        <button class="btn btn-plain" onclick="exportAllToJSON()" style="flex:1;font-size:11px;padding:6px">Export All</button>
-        <button class="btn btn-plain" onclick="importFromJSON()" style="flex:1;font-size:11px;padding:6px">Import</button>
-        <button id="sync-all-btn" onclick="syncAllPatientsToCloud()" style="background:var(--sf-purple);color:#fff;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-weight:500;font-size:11px;font-family:var(--sf-system-font)">Sync All</button>
-        <button id="pull-btn" onclick="fetchAndRefreshFromCloud()" style="background:var(--sf-green);color:#fff;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-weight:500;font-size:11px;font-family:var(--sf-system-font)">Pull</button>
       </div>
     </div>
 
@@ -1207,6 +1657,20 @@
         </div>
       </div>
 
+      <!-- Evaluation Timeline -->
+      <div class="eval-timeline" id="eval-timeline">
+        <div class="eval-timeline-header">
+          <div style="display:flex;align-items:center">
+            <span class="eval-timeline-title">Assessment Timeline</span>
+            <span class="eval-count-badge" id="eval-count-badge">0 evaluations</span>
+          </div>
+          <button class="btn-new-eval" id="btn-new-eval" onclick="promptNewReevaluation()" style="display:none">
+            ➕ New Re-evaluation
+          </button>
+        </div>
+        <div class="eval-timeline-pills" id="eval-timeline-pills"></div>
+      </div>
+
       <!-- Navigation -->
       <div class="nav-tabs" id="nav-tabs"></div>
 
@@ -1230,6 +1694,7 @@
       {id:'24h',label:'24h Record'},
       {id:'nutrition',label:'Nutrition & Health Tracking'},
       {id:'summary',label:'Summary'},
+      {id:'comparison',label:'Progress / Comparison'},
     ];
 
     const LOCKED_SECTIONS = [];
@@ -1237,7 +1702,321 @@
     let formData = {};
     let db = null;
     let selectedDoctor = localStorage.getItem('pt_selected_doctor') || '';
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZOqfpLI-n-anBM8DAakHKhQA1b5i09oikn087Z-GaO93IEWiB7y06OktsHCYUaJmZ/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_uKVFxj2iG5FLAHbIjbtEGEmVTxgKb2SpZ2cgGaIP-vmssijTDhmTn5moMhKd_qHq/exec";
+
+    // ---- Re-evaluation System State ----
+    let activeEvalId = null;
+    let activePatientCaseId = null;
+
+    // Fields that persist across evaluations (static patient data)
+    const STATIC_FIELDS = ['name','case_id','caseId','dob','sex','marital','education','dominant_hand','occupation','referral','diagnoses','msk_condition','obesity_class','chief_complaint','onset','sig_therapist','sig_date','sessions','sessions_from','sessions_to','sess_day_0','sess_day_1','sess_day_2','sess_day_3','sess_day_4','sess_day_5','sess_day_6','problem_count','stg_count','ltg_count'];
+
+    function isStaticField(key) {
+      if (STATIC_FIELDS.includes(key)) return true;
+      if (key.startsWith('prob_') || key.startsWith('stg_') || key.startsWith('ltg_')) return true;
+      if (key.startsWith('int_')) return true;
+      return false;
+    }
+
+    function deepClone(obj) {
+      try { return JSON.parse(JSON.stringify(obj)); } catch(e) { return obj; }
+    }
+
+    function extractDynamicData(src) {
+      const dynamic = {};
+      const excludeKeys = new Set(['evaluations', 'activeEvalId']);
+      for (const key of Object.keys(src)) {
+        if (!isStaticField(key) && !excludeKeys.has(key)) {
+          dynamic[key] = deepClone(src[key]);
+        }
+      }
+      return dynamic;
+    }
+
+    function extractStaticData(src) {
+      const staticData = {};
+      for (const key of Object.keys(src)) {
+        if (isStaticField(key)) {
+          staticData[key] = src[key];
+        }
+      }
+      return staticData;
+    }
+
+    // ---- Evaluation Management ----
+    function generateEvalId() {
+      return 'eval_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+    }
+
+    function getEvaluations() {
+      return formData.evaluations || [];
+    }
+
+    function getActiveEvaluation() {
+      if (!activeEvalId || !formData.evaluations) return null;
+      return formData.evaluations.find(e => e.eval_id === activeEvalId) || null;
+    }
+
+    function renderTimeline() {
+      const timeline = document.getElementById('eval-timeline');
+      const pillsContainer = document.getElementById('eval-timeline-pills');
+      const countBadge = document.getElementById('eval-count-badge');
+      const newEvalBtn = document.getElementById('btn-new-eval');
+
+      const hasCase = !!(formData.case_id || formData.caseId || activePatientCaseId);
+      const evals = getEvaluations();
+
+      if (!hasCase && evals.length === 0) {
+        timeline.classList.remove('visible');
+        return;
+      }
+
+      timeline.classList.add('visible');
+
+      if (evals.length === 0) {
+        countBadge.textContent = 'New Patient';
+        pillsContainer.innerHTML = '<span style="font-size:11px;color:var(--gray-400);padding:4px 8px">No evaluations yet. Click <b>Save</b> to create the first Baseline evaluation.</span>';
+        newEvalBtn.style.display = 'none';
+        return;
+      }
+
+      countBadge.textContent = evals.length + ' evaluation' + (evals.length !== 1 ? 's' : '');
+      newEvalBtn.style.display = 'inline-flex';
+
+      const typeIcons = {
+        'Baseline': '📋', 'Initial': '📋',
+        'Follow-up': '🔄', 'Re-evaluation': '🔄',
+        'Final/Discharge': '✅'
+      };
+
+      // Count how many evals share the same date
+      const dateCounts = {};
+      evals.forEach(ev => {
+        const d = ev.eval_date || 'N/A';
+        dateCounts[d] = (dateCounts[d] || 0) + 1;
+      });
+
+      // Track per-date counter for numbering duplicates
+      const dateSeen = {};
+
+      pillsContainer.innerHTML = evals.map((ev, idx) => {
+        const icon = typeIcons[ev.eval_type] || '📅';
+        const isActive = ev.eval_id === activeEvalId;
+        const d = ev.eval_date || 'N/A';
+
+        // Add index label if multiple evals share the same date
+        let label = ev.eval_type;
+        if (dateCounts[d] > 1) {
+          dateSeen[d] = (dateSeen[d] || 0) + 1;
+          label += ' #' + dateSeen[d];
+        }
+
+        return `<button class="eval-pill ${isActive ? 'active' : ''}" onclick="switchEvaluation('${ev.eval_id}')" title="${ev.eval_type} - ${d}${ev.therapist_name ? ' by ' + ev.therapist_name : ''}">
+          <span>${icon}</span>
+          <span class="pill-type">${label}</span>
+          <span class="pill-date">${d}</span>
+        </button>`;
+      }).join('');
+    }
+
+    function switchEvaluation(evalId) {
+      try {
+        if (!activePatientCaseId) return;
+        activeEvalId = evalId;
+        const evals = getEvaluations();
+        const ev = evals.find(e => e.eval_id === evalId);
+        if (!ev) return;
+
+        // Deep copy: preserve static fields, replace dynamic with deep-cloned eval data
+        const staticSnapshot = {};
+        for (const key of Object.keys(formData)) {
+          if (isStaticField(key) || key === 'evaluations' || key === 'activeEvalId') {
+            staticSnapshot[key] = deepClone(formData[key]);
+          }
+        }
+
+        // Start fresh with static fields
+        formData = staticSnapshot;
+
+        // Load evaluation data (deep cloned)
+        const evalData = deepClone(ev.data || {});
+        Object.assign(formData, evalData);
+
+        // Ensure evals array and active ID are set
+        formData.evaluations = evals;
+        formData.activeEvalId = activeEvalId;
+
+        localStorage.setItem('pt_icf_data', JSON.stringify(formData));
+        dbSaveCurrent();
+        buildSections();
+        renderTimeline();
+        showNotification(ev.eval_type + ' (' + ev.eval_date + ') loaded', 'info');
+      } catch (err) {
+        console.error('switchEvaluation error:', err);
+        showNotification('Error switching evaluation', 'error');
+      }
+    }
+
+    async function promptNewReevaluation() {
+      if (!activePatientCaseId) {
+        // If there's form data with a name, offer to save first
+        if (formData.name && formData.name.trim()) {
+          showNotification('Saving patient first, then creating re-evaluation...', 'info');
+          await saveData(false);
+          // After save, activePatientCaseId should be set
+          if (!activePatientCaseId) {
+            showNotification('Could not create patient. Please try again.', 'error');
+            return;
+          }
+        } else {
+          showNotification('Enter patient name and save first, or load a patient from sidebar', 'warning');
+          return;
+        }
+      }
+      openNewReevalDialog();
+    }
+
+    function openNewReevalDialog() {
+      const evals = getEvaluations();
+      const existingDates = evals.map(e => e.eval_date);
+
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.6);display:flex;align-items:center;justify-content:center;z-index:99999;animation:fadeIn 0.2s';
+
+      function checkDuplicateDate() {
+        const dateInput = overlay.querySelector('#new-eval-date');
+        const warnEl = overlay.querySelector('#dup-date-warn');
+        if (dateInput && warnEl) {
+          if (existingDates.includes(dateInput.value)) {
+            const count = existingDates.filter(d => d === dateInput.value).length;
+            warnEl.style.display = 'block';
+            warnEl.innerHTML = '⚠️ This date already has ' + count + ' evaluation(s). A new evaluation will be added alongside them.';
+          } else {
+            warnEl.style.display = 'none';
+          }
+        }
+      }
+
+      overlay.innerHTML = `
+        <div style="background:var(--card-bg);border-radius:var(--radius-xl);padding:28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+          <div style="font-size:17px;font-weight:700;color:var(--label);margin-bottom:6px">New Re-evaluation</div>
+          <div style="font-size:12px;color:var(--secondary-label);margin-bottom:20px">Create a new evaluation for this patient. Static data (name, DOB, diagnosis) will be preserved. Clinical measurements will be reset.</div>
+          <div id="dup-date-warn" style="display:none;padding:10px 14px;background:#fffbeb;border:1px solid #fbbf24;border-radius:8px;font-size:11px;color:#92400e;margin-bottom:14px"></div>
+          <div class="form-group" style="margin-bottom:14px">
+            <label class="form-label">Evaluation Type</label>
+            <select id="new-eval-type" class="form-select">
+              <option value="Re-evaluation">Re-evaluation</option>
+              <option value="Follow-up">Follow-up</option>
+              <option value="Final/Discharge">Final / Discharge</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:20px">
+            <label class="form-label">Evaluation Date</label>
+            <input type="date" id="new-eval-date" class="form-input" value="${new Date().toISOString().split('T')[0]}">
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-outline" style="flex:1" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+            <button class="btn btn-success" style="flex:1" id="create-eval-btn">Create Evaluation</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      // Check for duplicate date on load and on change
+      checkDuplicateDate();
+      overlay.querySelector('#new-eval-date').addEventListener('input', checkDuplicateDate);
+
+      overlay.querySelector('#create-eval-btn').onclick = () => {
+        const type = overlay.querySelector('#new-eval-type').value;
+        const date = overlay.querySelector('#new-eval-date').value;
+        overlay.remove();
+        createNewEvaluation(activePatientCaseId, type, date);
+      };
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+    }
+
+    async function createNewEvaluation(caseId, evalType, evalDate) {
+      try {
+        // First, save the current state as an evaluation if there's data
+        const hasData = Object.keys(formData).filter(k => !['evaluations','activeEvalId'].includes(k) && formData[k] && formData[k] !== '').length > 3;
+        if (hasData && (formData.case_id || formData.caseId)) {
+          await saveCurrentAsEvaluation();
+        }
+
+        // Create new evaluation entry
+        const newEval = {
+          eval_id: generateEvalId(),
+          eval_date: evalDate || new Date().toISOString().split('T')[0],
+          eval_type: evalType || 'Re-evaluation',
+          therapist_name: selectedDoctor || '',
+          data: {}
+        };
+
+        if (!formData.evaluations) formData.evaluations = [];
+        formData.evaluations.push(newEval);
+        activeEvalId = newEval.eval_id;
+
+        // Clear dynamic fields
+        for (const key of Object.keys(formData)) {
+          if (!isStaticField(key) && key !== 'evaluations' && key !== 'activeEvalId') {
+            delete formData[key];
+          }
+        }
+
+        // Set assessment date to the new eval date
+        formData.assessment_date = newEval.eval_date;
+        formData.therapist = selectedDoctor || '';
+
+        localStorage.setItem('pt_icf_data', JSON.stringify(formData));
+        await dbSaveCurrent();
+
+        // Navigate to Patient tab so user sees the fresh form
+        currentSection = 'patient';
+        buildSections();
+        renderTimeline();
+
+        const evalCount = getEvaluations().length;
+        showNotification('✅ ' + evalType + ' created (' + evalDate + ') — Total: ' + evalCount + ' evaluations', 'success');
+      } catch (err) {
+        console.error('createNewEvaluation error:', err);
+        showNotification('Error creating evaluation: ' + err.message, 'error');
+      }
+    }
+
+    async function saveCurrentAsEvaluation() {
+      const evals = getEvaluations();
+      const dynamicData = extractDynamicData(formData);
+
+      if (activeEvalId) {
+        // Update existing active evaluation — preserve its original eval_date
+        const idx = evals.findIndex(e => e.eval_id === activeEvalId);
+        if (idx >= 0) {
+          evals[idx].data = dynamicData;
+          evals[idx].therapist_name = formData.therapist || selectedDoctor || evals[idx].therapist_name;
+          // Do NOT overwrite eval_date here — it should only change via switchEvaluation or createNewEvaluation
+        }
+      } else {
+        // Create new evaluation from current data
+        const newEval = {
+          eval_id: generateEvalId(),
+          eval_date: formData.assessment_date || new Date().toISOString().split('T')[0],
+          eval_type: 'Baseline',
+          therapist_name: formData.therapist || selectedDoctor || '',
+          data: dynamicData
+        };
+        if (!formData.evaluations) formData.evaluations = [];
+        formData.evaluations.push(newEval);
+        activeEvalId = newEval.eval_id;
+      }
+
+      // Sort evaluations by date, then by creation order (eval_id)
+      formData.evaluations.sort((a, b) => {
+        const dateCmp = (a.eval_date || '').localeCompare(b.eval_date || '');
+        if (dateCmp !== 0) return dateCmp;
+        return (a.eval_id || '').localeCompare(b.eval_id || '');
+      });
+    }
 
     // ---- Custom iOS-style Confirm Dialog ----
     function showConfirmDialog(message) {
@@ -1410,12 +2189,22 @@
           if (!existingPatient) {
             // case_id doesn't exist in DB — it's stale/legacy data — clear it
             delete formData.case_id;
+            activePatientCaseId = null;
+            activeEvalId = null;
             localStorage.removeItem('pt_icf_data');
             dbSaveCurrent();
+          } else {
+            activePatientCaseId = formData.case_id;
+            // Restore evaluations from saved data
+            if (formData.evaluations && formData.evaluations.length > 0) {
+              activeEvalId = formData.activeEvalId || formData.evaluations[formData.evaluations.length - 1].eval_id;
+            }
           }
         } catch(e) {
           // DB error — remove case_id to be safe
           delete formData.case_id;
+          activePatientCaseId = null;
+          activeEvalId = null;
         }
       }
       renderPatientsSidebar();
@@ -1866,6 +2655,12 @@
           formData.assessment_date = new Date().toISOString().split('T')[0];
         }
 
+        // Set active patient early so timeline and re-eval work immediately
+        activePatientCaseId = caseId;
+
+        // Save current form state into evaluations array
+        await saveCurrentAsEvaluation();
+
         const patientRecord = {
           caseId: caseId,
           name: formData.name || 'Anonymous',
@@ -1886,6 +2681,7 @@
         localStorage.setItem('pt_patients', JSON.stringify(patients));
 
         await renderPatientsSidebar();
+        renderTimeline();
 
         if (showNotice) showNotification('Saved locally. Syncing to cloud...', 'info');
 
@@ -1935,13 +2731,19 @@
           <div id="patientList" style="display:flex;flex-direction:column;gap:8px">
             ${patients && patients.length ? patients.map(p => {
               let patientName = p.name || 'Unknown';
-              if (patientName === 'Unknown' && p.data) {
-                try { const parsed = JSON.parse(p.data); patientName = parsed.name || 'Unknown'; } catch(e) {}
+              let assessmentDate = null;
+              if (p.data) {
+                try {
+                  const parsed = JSON.parse(p.data);
+                  if (patientName === 'Unknown') patientName = parsed.name || 'Unknown';
+                  assessmentDate = parsed.assessment_date || null;
+                } catch(e) {}
               }
+              const dateStr = assessmentDate || (p.date ? new Date(p.date).toISOString().split('T')[0] : 'N/A');
               return `
               <div class="patient-item" onclick="loadPatientData('${p.caseId}')">
                 <div style="font-weight:600;color:var(--sf-label)">${patientName}</div>
-                <div style="font-size:11px;color:var(--sf-gray);margin-top:2px">Case: ${p.caseId} · ${p.date ? new Date(p.date).toLocaleDateString() : 'N/A'}</div>
+                <div style="font-size:11px;color:var(--sf-gray);margin-top:2px">Case: ${p.caseId} · ${dateStr}</div>
               </div>
             `}).join('') : '<p style="text-align:center;color:var(--sf-gray);padding:20px">No patients found</p>'}
           </div>
@@ -1950,7 +2752,7 @@
       document.body.appendChild(modal);
     }
 
-    async function loadPatientData(caseId) {
+    async function loadPatientData(caseId, evalId) {
       try {
         let patient = null;
         try { patient = await dbGetPatient(caseId); } catch(e) {}
@@ -1960,14 +2762,56 @@
           patient = patients.find(p => p.caseId === caseId);
         }
         if (patient && patient.data) {
-          formData = JSON.parse(patient.data);
+          const loadedData = JSON.parse(patient.data);
+          
+          // Handle backward compatibility: if no evaluations array, create one from current data
+          if (!loadedData.evaluations || loadedData.evaluations.length === 0) {
+            const dynamicData = extractDynamicData(loadedData);
+            loadedData.evaluations = [{
+              eval_id: generateEvalId(),
+              eval_date: loadedData.assessment_date || patient.date ? new Date(patient.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+              eval_type: 'Baseline',
+              therapist_name: loadedData.therapist || loadedData.sig_therapist || '',
+              data: dynamicData
+            }];
+            loadedData.activeEvalId = loadedData.evaluations[0].eval_id;
+          }
+
+          formData = loadedData;
+          activePatientCaseId = caseId;
+          activeEvalId = evalId || formData.activeEvalId || (formData.evaluations.length > 0 ? formData.evaluations[formData.evaluations.length - 1].eval_id : null);
+          
+          // Load evaluation data with deep copy to avoid shared references
+          const targetEvalId = evalId || activeEvalId;
+          if (targetEvalId) {
+            const ev = formData.evaluations.find(e => e.eval_id === targetEvalId);
+            if (ev) {
+              // Extract only static fields from loadedData
+              const staticData = {};
+              for (const key of Object.keys(formData)) {
+                if (isStaticField(key) || key === 'evaluations' || key === 'activeEvalId') {
+                  staticData[key] = deepClone(formData[key]);
+                }
+              }
+              formData = staticData;
+              // Load evaluation data (deep cloned)
+              Object.assign(formData, deepClone(ev.data || {}));
+              formData.evaluations = loadedData.evaluations;
+              formData.activeEvalId = activeEvalId;
+              if (evalId) activeEvalId = evalId;
+            }
+          }
+          
+          formData.activeEvalId = activeEvalId;
+
           if(selectedDoctor && !formData.sig_therapist) formData.sig_therapist = selectedDoctor;
           localStorage.setItem('pt_icf_data', JSON.stringify(formData));
           dbSaveCurrent();
           document.getElementById('patientModal')?.remove();
           buildSections();
           renderPatientsSidebar();
-          showNotification('Patient loaded', 'success');
+          renderTimeline();
+          showNotification('Patient loaded (' + (formData.evaluations?.length || 0) + ' evaluations)', 'success');
         } else {
           showNotification('Patient not found', 'error');
         }
@@ -1998,10 +2842,13 @@
       const confirmed = await showConfirmDialog('Create a new assessment? This will clear current data.');
       if(confirmed) {
         formData = {};
+        activeEvalId = null;
+        activePatientCaseId = null;
         if(selectedDoctor) formData.sig_therapist = selectedDoctor;
         localStorage.removeItem('pt_icf_data');
         await dbSaveCurrent();
         buildSections();
+        renderTimeline();
         showNotification('New assessment ready', 'success');
       }
     }
@@ -2017,6 +2864,10 @@
           calcWHRatio();
           updateProgress();
           updateSessionStats();
+          renderTimeline();
+          renderComparisonCharts();
+          initPainMapListeners();
+          setPainLevel(window._currentPainLevel !== undefined ? window._currentPainLevel : 5);
         }, 100);
       } catch(e) {
         console.error('Error building sections:', e);
@@ -2039,6 +2890,7 @@
           ${build24h()}
           ${buildNutritionHealth()}
           ${buildSummary()}
+          ${buildComparison()}
         `;
       } catch(e) {
         return '<div style="padding:20px;color:var(--sf-red)">Error building form.</div>';
@@ -2367,6 +3219,309 @@
       </div>`;
     }
 
+    function buildPainMapCard() {
+      const painMapData = (() => { try { return JSON.parse(formData.pain_map || '{}'); } catch(e) { return {}; } })();
+      const currentPainLevel = 5;
+
+      function regionColor(id) {
+        const v = parseInt(painMapData[id]);
+        if (isNaN(v)) return 'transparent';
+        if (v === 0) return '#22c55e';
+        if (v <= 3) return '#facc15';
+        if (v <= 5) return '#f97316';
+        if (v <= 7) return '#ef4444';
+        return '#991b1b';
+      }
+
+      const regionLabels = {
+        head_f:'Head', neck_f:'Neck', chest:'Chest', abdomen:'Abdomen',
+        l_shoulder_f:'L Shoulder', r_shoulder_f:'R Shoulder',
+        l_arm_f:'L Arm', r_arm_f:'R Arm', l_forearm_f:'L Forearm', r_forearm_f:'R Forearm',
+        l_hand_f:'L Hand', r_hand_f:'R Hand',
+        l_hip_f:'L Hip', r_hip_f:'R Hip', l_thigh_f:'L Thigh', r_thigh_f:'R Thigh',
+        l_knee_f:'L Knee', r_knee_f:'R Knee', l_shin_f:'L Shin', r_shin_f:'R Shin',
+        l_foot_f:'L Foot', r_foot_f:'R Foot',
+        head_b:'Head (B)', neck_b:'Neck (B)', upper_back:'Upper Back',
+        low_back:'Low Back',
+        l_shoulder_b:'L Shoulder (B)', r_shoulder_b:'R Shoulder (B)',
+        l_arm_b:'L Arm (B)', r_arm_b:'R Arm (B)', l_forearm_b:'L Forearm (B)', r_forearm_b:'R Forearm (B)',
+        l_hand_b:'L Hand (B)', r_hand_b:'R Hand (B)',
+        l_buttock:'L Buttock', r_buttock:'R Buttock',
+        l_hamstring:'L Hamstring', r_hamstring:'R Hamstring',
+        l_calf:'L Calf', r_calf:'R Calf', l_heel:'L Heel', r_heel:'R Heel'
+      };
+
+      function buildFrontSVG() {
+        return `<svg class="pain-map-svg" viewBox="0 0 160 380" id="pain-map-front">
+          <ellipse class="body-outline" cx="80" cy="28" rx="18" ry="22"/>
+          <line class="body-line" x1="80" y1="50" x2="80" y2="150"/>
+          <line class="body-line" x1="80" y1="60" x2="40" y2="110"/>
+          <line class="body-line" x1="80" y1="60" x2="120" y2="110"/>
+          <line class="body-line" x1="40" y1="110" x2="30" y2="150"/>
+          <line class="body-line" x1="120" y1="110" x2="130" y2="150"/>
+          <line class="body-line" x1="80" y1="150" x2="55" y2="210"/>
+          <line class="body-line" x1="80" y1="150" x2="105" y2="210"/>
+          <line class="body-line" x1="55" y1="210" x2="50" y2="280"/>
+          <line class="body-line" x1="105" y1="210" x2="110" y2="280"/>
+          <line class="body-line" x1="50" y1="280" x2="45" y2="340"/>
+          <line class="body-line" x1="110" y1="280" x2="115" y2="340"/>
+          <ellipse class="body-region" data-region="head_f" cx="80" cy="28" rx="16" ry="20" style="fill:${regionColor('head_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="neck_f" x="73" y="48" width="14" height="12" rx="4" style="fill:${regionColor('neck_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <path class="body-region" data-region="chest" d="M55,65 Q80,55 105,65 L100,130 Q80,140 60,130 Z" style="fill:${regionColor('chest')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <path class="body-region" data-region="abdomen" d="M60,130 Q80,125 100,130 L95,160 Q80,168 65,160 Z" style="fill:${regionColor('abdomen')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="l_shoulder_f" cx="42" cy="62" rx="14" ry="10" style="fill:${regionColor('l_shoulder_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="r_shoulder_f" cx="118" cy="62" rx="14" ry="10" style="fill:${regionColor('r_shoulder_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="l_arm_f" x="32" y="72" width="14" height="38" rx="7" style="fill:${regionColor('l_arm_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="r_arm_f" x="114" y="72" width="14" height="38" rx="7" style="fill:${regionColor('r_arm_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="l_forearm_f" x="27" y="112" width="12" height="36" rx="6" style="fill:${regionColor('l_forearm_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="r_forearm_f" x="121" y="112" width="12" height="36" rx="6" style="fill:${regionColor('r_forearm_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="l_hand_f" cx="33" cy="156" rx="8" ry="10" style="fill:${regionColor('l_hand_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="r_hand_f" cx="127" cy="156" rx="8" ry="10" style="fill:${regionColor('r_hand_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="l_hip_f" cx="65" cy="165" rx="16" ry="14" style="fill:${regionColor('l_hip_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="r_hip_f" cx="95" cy="165" rx="16" ry="14" style="fill:${regionColor('r_hip_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="l_thigh_f" x="53" y="180" width="20" height="60" rx="10" style="fill:${regionColor('l_thigh_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="r_thigh_f" x="87" y="180" width="20" height="60" rx="10" style="fill:${regionColor('r_thigh_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="l_knee_f" cx="63" cy="250" rx="11" ry="10" style="fill:${regionColor('l_knee_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="r_knee_f" cx="97" cy="250" rx="11" ry="10" style="fill:${regionColor('r_knee_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="l_shin_f" x="53" y="262" width="18" height="58" rx="8" style="fill:${regionColor('l_shin_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="r_shin_f" x="89" y="262" width="18" height="58" rx="8" style="fill:${regionColor('r_shin_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="l_foot_f" cx="60" cy="332" rx="12" ry="8" style="fill:${regionColor('l_foot_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="r_foot_f" cx="100" cy="332" rx="12" ry="8" style="fill:${regionColor('r_foot_f')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+        </svg>`;
+      }
+
+      function buildBackSVG() {
+        return `<svg class="pain-map-svg" viewBox="0 0 160 380" id="pain-map-back">
+          <ellipse class="body-outline" cx="80" cy="28" rx="18" ry="22"/>
+          <line class="body-line" x1="80" y1="50" x2="80" y2="150"/>
+          <line class="body-line" x1="80" y1="60" x2="40" y2="110"/>
+          <line class="body-line" x1="80" y1="60" x2="120" y2="110"/>
+          <line class="body-line" x1="40" y1="110" x2="30" y2="150"/>
+          <line class="body-line" x1="120" y1="110" x2="130" y2="150"/>
+          <line class="body-line" x1="80" y1="150" x2="55" y2="210"/>
+          <line class="body-line" x1="80" y1="150" x2="105" y2="210"/>
+          <line class="body-line" x1="55" y1="210" x2="50" y2="280"/>
+          <line class="body-line" x1="105" y1="210" x2="110" y2="280"/>
+          <line class="body-line" x1="50" y1="280" x2="45" y2="340"/>
+          <line class="body-line" x1="110" y1="280" x2="115" y2="340"/>
+          <ellipse class="body-region" data-region="head_b" cx="80" cy="28" rx="16" ry="20" style="fill:${regionColor('head_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="neck_b" x="73" y="48" width="14" height="12" rx="4" style="fill:${regionColor('neck_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <path class="body-region" data-region="upper_back" d="M55,65 Q80,55 105,65 L100,115 Q80,125 60,115 Z" style="fill:${regionColor('upper_back')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <path class="body-region" data-region="low_back" d="M60,115 Q80,110 100,115 L95,155 Q80,165 65,155 Z" style="fill:${regionColor('low_back')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="l_shoulder_b" cx="42" cy="62" rx="14" ry="10" style="fill:${regionColor('l_shoulder_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="r_shoulder_b" cx="118" cy="62" rx="14" ry="10" style="fill:${regionColor('r_shoulder_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="l_arm_b" x="32" y="72" width="14" height="38" rx="7" style="fill:${regionColor('l_arm_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="r_arm_b" x="114" y="72" width="14" height="38" rx="7" style="fill:${regionColor('r_arm_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="l_forearm_b" x="27" y="112" width="12" height="36" rx="6" style="fill:${regionColor('l_forearm_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="r_forearm_b" x="121" y="112" width="12" height="36" rx="6" style="fill:${regionColor('r_forearm_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="l_hand_b" cx="33" cy="156" rx="8" ry="10" style="fill:${regionColor('l_hand_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="r_hand_b" cx="127" cy="156" rx="8" ry="10" style="fill:${regionColor('r_hand_b')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="l_buttock" cx="65" cy="170" rx="18" ry="16" style="fill:${regionColor('l_buttock')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="r_buttock" cx="95" cy="170" rx="18" ry="16" style="fill:${regionColor('r_buttock')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="l_hamstring" x="53" y="188" width="20" height="52" rx="10" style="fill:${regionColor('l_hamstring')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="r_hamstring" x="87" y="188" width="20" height="52" rx="10" style="fill:${regionColor('r_hamstring')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="l_calf" x="53" y="262" width="18" height="58" rx="8" style="fill:${regionColor('l_calf')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <rect class="body-region" data-region="r_calf" x="89" y="262" width="18" height="58" rx="8" style="fill:${regionColor('r_calf')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="l_heel" cx="60" cy="332" rx="10" ry="7" style="fill:${regionColor('l_heel')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+          <ellipse class="body-region" data-region="r_heel" cx="100" cy="332" rx="10" ry="7" style="fill:${regionColor('r_heel')};stroke:rgba(148,163,184,0.3);stroke-width:0.5"/>
+        </svg>`;
+      }
+
+      const painScaleColors = ['#22c55e','#22c55e','#84cc16','#facc15','#facc15','#f97316','#f97316','#ef4444','#ef4444','#dc2626','#991b1b'];
+      const painScaleLabels = ['0 - No pain','1 - Minimal','2 - Mild','3 - Uncomfortable','4 - Bothersome','5 - Moderate','6 - Distressing','7 - Severe','8 - Very severe','9 - Intense','10 - Worst'];
+
+      const scaleBtns = painScaleLabels.map((label, i) => {
+        return `<button data-level="${i}" onclick="setPainLevel(${i})" style="${i===5?'border-color:'+painScaleColors[i]+';background:'+painScaleColors[i]+'12':''}">
+          <span class="scale-dot" style="background:${painScaleColors[i]}"></span>
+          <span>${label}</span>
+        </button>`;
+      }).join('');
+
+      const selectedEntries = Object.entries(painMapData).filter(([k,v]) => v !== '' && v !== undefined);
+      const selectedTags = selectedEntries.map(([k,v]) => {
+        const label = regionLabels[k] || k;
+        const color = regionColor(k);
+        return `<span class="pain-tag" style="background:${color}20;color:${color};border-color:${color}40">${label}: ${v}
+          <span class="tag-x" onclick="removePainRegion('${k}')">&#10005;</span></span>`;
+      }).join('');
+
+      const selectedCount = selectedEntries.length;
+
+      return `<div class="card">
+        <div class="card-header">
+          <div class="card-title">Interactive Pain Map</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            ${selectedCount > 0 ? `<span style="font-size:11px;color:var(--gray-500)">${selectedCount} region${selectedCount!==1?'s':''}</span>
+            <button onclick="clearAllPainRegions()" style="font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--gray-200);background:#fff;color:var(--danger);cursor:pointer;font-family:var(--font);font-weight:500;transition:all 0.15s" onmouseover="this.style.background='var(--danger-bg)'" onmouseout="this.style.background='#fff'">Clear All</button>` : ''}
+            <span class="card-badge badge-msk">MSK</span>
+          </div>
+        </div>
+        <div class="pain-map-container">
+          <div class="pain-map-body">
+            <div class="pain-map-view">
+              <div class="view-label">Anterior</div>
+              ${buildFrontSVG()}
+            </div>
+            <div class="pain-map-view">
+              <div class="view-label">Posterior</div>
+              ${buildBackSVG()}
+            </div>
+          </div>
+          <div class="pain-scale-panel">
+            <div class="panel-title">Pain Level (NRS)</div>
+            <div class="pain-scale-btns" id="pain-scale-btns">
+              ${scaleBtns}
+            </div>
+            <div class="pain-legend">
+              <div class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>0-1</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#facc15"></span>2-4</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#f97316"></span>5-6</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>7-8</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#991b1b"></span>9-10</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:14px 16px;border-top:1px solid var(--gray-200);background:rgba(255,255,255,0.4)">
+          <div style="font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">Selected Regions</div>
+          <div id="pain-selected-tags">${selectedTags || '<span style="font-size:11px;color:var(--gray-400);line-height:1.6">Select a pain level above, then click a body region</span>'}</div>
+        </div>
+      </div>`;
+    }
+
+    function initPainMapListeners() {
+      document.querySelectorAll('.pain-map-svg .body-region').forEach(region => {
+        region.addEventListener('click', function(e) {
+          const regionId = this.getAttribute('data-region');
+          if (!regionId) return;
+          const currentLevel = window._currentPainLevel !== undefined ? window._currentPainLevel : 5;
+          let painMapData = {};
+          try { painMapData = JSON.parse(formData.pain_map || '{}'); } catch(ex) { painMapData = {}; }
+          if (painMapData[regionId] == currentLevel) {
+            delete painMapData[regionId];
+          } else {
+            painMapData[regionId] = currentLevel;
+          }
+          formData.pain_map = JSON.stringify(painMapData);
+          fd('pain_map', formData.pain_map);
+          updatePainMapVisuals();
+          syncPainMapToLocation();
+        });
+      });
+    }
+
+    function setPainLevel(level) {
+      window._currentPainLevel = level;
+      document.querySelectorAll('#pain-scale-btns button').forEach(btn => {
+        const isActive = parseInt(btn.getAttribute('data-level')) === level;
+        const colors = ['#22c55e','#22c55e','#84cc16','#facc15','#facc15','#f97316','#f97316','#ef4444','#ef4444','#dc2626','#991b1b'];
+        btn.style.borderColor = isActive ? colors[level] : '';
+        btn.style.background = isActive ? colors[level] + '12' : '';
+        btn.classList.toggle('active', isActive);
+      });
+    }
+
+    function removePainRegion(regionId) {
+      let painMapData = {};
+      try { painMapData = JSON.parse(formData.pain_map || '{}'); } catch(e) { painMapData = {}; }
+      delete painMapData[regionId];
+      formData.pain_map = JSON.stringify(painMapData);
+      fd('pain_map', formData.pain_map);
+      updatePainMapVisuals();
+      syncPainMapToLocation();
+    }
+
+    function clearAllPainRegions() {
+      formData.pain_map = '{}';
+      fd('pain_map', '{}');
+      updatePainMapVisuals();
+      syncPainMapToLocation();
+    }
+
+    function updatePainMapVisuals() {
+      let painMapData = {};
+      try { painMapData = JSON.parse(formData.pain_map || '{}'); } catch(e) { painMapData = {}; }
+
+      const regionLabels = {
+        head_f:'Head', neck_f:'Neck', chest:'Chest', abdomen:'Abdomen',
+        l_shoulder_f:'L Shoulder', r_shoulder_f:'R Shoulder',
+        l_arm_f:'L Arm', r_arm_f:'R Arm', l_forearm_f:'L Forearm', r_forearm_f:'R Forearm',
+        l_hand_f:'L Hand', r_hand_f:'R Hand',
+        l_hip_f:'L Hip', r_hip_f:'R Hip', l_thigh_f:'L Thigh', r_thigh_f:'R Thigh',
+        l_knee_f:'L Knee', r_knee_f:'R Knee', l_shin_f:'L Shin', r_shin_f:'R Shin',
+        l_foot_f:'L Foot', r_foot_f:'R Foot',
+        head_b:'Head (B)', neck_b:'Neck (B)', upper_back:'Upper Back',
+        low_back:'Low Back',
+        l_shoulder_b:'L Shoulder (B)', r_shoulder_b:'R Shoulder (B)',
+        l_arm_b:'L Arm (B)', r_arm_b:'R Arm (B)', l_forearm_b:'L Forearm (B)', r_forearm_b:'R Forearm (B)',
+        l_hand_b:'L Hand (B)', r_hand_b:'R Hand (B)',
+        l_buttock:'L Buttock', r_buttock:'R Buttock',
+        l_hamstring:'L Hamstring', r_hamstring:'R Hamstring',
+        l_calf:'L Calf', r_calf:'R Calf', l_heel:'L Heel', r_heel:'R Heel'
+      };
+
+      function regionColor(id) {
+        const v = parseInt(painMapData[id]);
+        if (isNaN(v)) return 'transparent';
+        if (v === 0) return '#22c55e';
+        if (v <= 3) return '#facc15';
+        if (v <= 5) return '#f97316';
+        if (v <= 7) return '#ef4444';
+        return '#991b1b';
+      }
+
+      document.querySelectorAll('.pain-map-svg .body-region').forEach(region => {
+        const regionId = region.getAttribute('data-region');
+        if (regionId) {
+          region.style.fill = regionColor(regionId);
+          region.classList.toggle('selected', !!painMapData[regionId] && painMapData[regionId] !== '');
+        }
+      });
+
+      const tagsEl = document.getElementById('pain-selected-tags');
+      if (tagsEl) {
+        const entries = Object.entries(painMapData).filter(([k,v]) => v !== '' && v !== undefined);
+        if (entries.length === 0) {
+          tagsEl.innerHTML = '<span style="font-size:11px;color:var(--gray-400)">Click a region on the body, then set pain level</span>';
+        } else {
+          tagsEl.innerHTML = entries.map(([k,v]) => {
+            const label = regionLabels[k] || k;
+            const color = regionColor(k);
+            return `<span class="pain-tag" style="background:${color}20;color:${color};border-color:${color}40">${label}: ${v}
+              <span class="tag-x" onclick="removePainRegion('${k}')">&#10005;</span></span>`;
+          }).join('');
+        }
+      }
+    }
+
+    function syncPainMapToLocation() {
+      let painMapData = {};
+      try { painMapData = JSON.parse(formData.pain_map || '{}'); } catch(e) { painMapData = {}; }
+      const regionLabels = {
+        head_f:'Head', neck_f:'Neck', chest:'Chest', abdomen:'Abdomen',
+        l_shoulder_f:'L Shoulder', r_shoulder_f:'R Shoulder',
+        l_arm_f:'L Arm', r_arm_f:'R Arm', l_forearm_f:'L Forearm', r_forearm_f:'R Forearm',
+        l_hand_f:'L Hand', r_hand_f:'R Hand',
+        l_hip_f:'L Hip', r_hip_f:'R Hip', l_thigh_f:'L Thigh', r_thigh_f:'R Thigh',
+        l_knee_f:'L Knee', r_knee_f:'R Knee', l_shin_f:'L Shin', r_shin_f:'R Shin',
+        l_foot_f:'L Foot', r_foot_f:'R Foot',
+        head_b:'Head (B)', neck_b:'Neck (B)', upper_back:'Upper Back',
+        low_back:'Low Back',
+        l_shoulder_b:'L Shoulder (B)', r_shoulder_b:'R Shoulder (B)',
+        l_arm_b:'L Arm (B)', r_arm_b:'R Arm (B)', l_forearm_b:'L Forearm (B)', r_forearm_b:'R Forearm (B)',
+        l_hand_b:'L Hand (B)', r_hand_b:'R Hand (B)',
+        l_buttock:'L Buttock', r_buttock:'R Buttock',
+        l_hamstring:'L Hamstring', r_hamstring:'R Hamstring',
+        l_calf:'L Calf', r_calf:'R Calf', l_heel:'L Heel', r_heel:'R Heel'
+      };
+      const entries = Object.entries(painMapData).filter(([k,v]) => v !== '' && v !== undefined);
+      const locationStr = entries.map(([k,v]) => `${regionLabels[k]||k}(${v})`).join(', ');
+      const locInput = document.querySelector('[data-field="pain_location"]');
+      if (locInput && !locInput.value) {
+        locInput.value = locationStr;
+        formData.pain_location = locationStr;
+      }
+    }
+
     function buildMSKExam() {
       const romItems = ['Cervical Flex/Ext','Cervical Rotation','Shoulder Flex/Ext','Shoulder Abd','Elbow Flex/Ext','Wrist Flex/Ext','Hip Flex/Ext','Hip Abd','Knee Flex/Ext','Ankle Dorsi/Plantar','Lumbar Flex/Ext'];
       const mmtItems = ['Shoulder Abductors','Elbow Flex/Ext','Hip Flex/Ext','Hip Abd','Knee Flex/Ext','Ankle Dors/Plant','Core Stability'];
@@ -2386,6 +3541,7 @@
         </tr>`).join('');
 
       return `<div class="section" id="sec-msk-exam">
+        ${buildPainMapCard()}
         <div class="card">
           <div class="card-header">
             <div class="card-title">Pain Assessment</div>
@@ -2860,6 +4016,368 @@
       nav.innerHTML = SECTIONS.map(s=>`<button class="nav-btn ${s.id===currentSection?'active':''}" onclick="showSection('${s.id}')">${s.label}</button>`).join('');
     }
 
+    function buildComparison() {
+      const evals = getEvaluations();
+      if (evals.length < 2) {
+        return `<div class="section" id="sec-comparison">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Progress / Comparison</div>
+            </div>
+            <div class="comparison-empty">
+              <div class="comparison-empty-icon">📊</div>
+              <div style="font-size:15px;font-weight:600;color:var(--label);margin-bottom:6px">Comparison View</div>
+              <div style="max-width:400px;margin:0 auto">Save at least 2 evaluations to compare clinical data side-by-side and track progress over time.</div>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      const evalOptions = evals.map((ev, i) => 
+        `<option value="${ev.eval_id}">${ev.eval_type} - ${ev.eval_date}${ev.therapist_name ? ' (' + ev.therapist_name + ')' : ''}</option>`
+      ).join('');
+
+      const comparisonFields = [
+        { cat: 'Vitals & Anthropometrics', fields: [
+          { key: 'weight', label: 'Weight (kg)', type: 'num' },
+          { key: 'height', label: 'Height (cm)', type: 'num' },
+          { key: 'bmi', label: 'BMI', type: 'num' },
+          { key: 'waist_circ', label: 'Waist Circ. (cm)', type: 'num' },
+          { key: 'hip_circ', label: 'Hip Circ. (cm)', type: 'num' },
+          { key: 'wh_ratio', label: 'W/H Ratio', type: 'num' },
+          { key: 'bp', label: 'Blood Pressure', type: 'text' },
+          { key: 'hr', label: 'Heart Rate (bpm)', type: 'num' },
+          { key: 'spo2', label: 'SpO2 (%)', type: 'num' },
+          { key: 'rr', label: 'Resp. Rate', type: 'num' },
+          { key: 'temp', label: 'Temperature (°C)', type: 'num' },
+          { key: 'pain_rest', label: 'Pain at Rest (NRS)', type: 'num' },
+        ]},
+        { cat: 'Pain Assessment', fields: [
+          { key: 'pain_nrs_rest', label: 'Pain at Rest (NRS)', type: 'num' },
+          { key: 'pain_nrs_move', label: 'Pain with Movement', type: 'num' },
+          { key: 'pain_type', label: 'Pain Type', type: 'text' },
+          { key: 'pain_pattern', label: 'Pain Pattern', type: 'text' },
+        ]},
+        { cat: 'ICF Body Functions', fields: [
+          { key: 'bf_msk_b280', label: 'b280 Pain', type: 'icf' },
+          { key: 'bf_msk_b710', label: 'b710 Joint Mobility', type: 'icf' },
+          { key: 'bf_msk_b730', label: 'b730 Muscle Power', type: 'icf' },
+          { key: 'bf_msk_b735', label: 'b735 Muscle Tone', type: 'icf' },
+          { key: 'bf_msk_b740', label: 'b740 Muscle Endurance', type: 'icf' },
+          { key: 'bf_msk_b755', label: 'b755 Involuntary Movements', type: 'icf' },
+          { key: 'bf_msk_b770', label: 'b770 Gait Pattern', type: 'icf' },
+          { key: 'bf_msk_b780', label: 'b780 Sensations', type: 'icf' },
+          { key: 'bf_ob_b410', label: 'b410 Heart Functions', type: 'icf' },
+          { key: 'bf_ob_b420', label: 'b420 Blood Pressure', type: 'icf' },
+          { key: 'bf_ob_b440', label: 'b440 Respiration', type: 'icf' },
+          { key: 'bf_ob_b530', label: 'b530 Weight Maintenance', type: 'icf' },
+          { key: 'bf_ob_b540', label: 'b540 Metabolic Functions', type: 'icf' },
+          { key: 'bf_ob_b130', label: 'b130 Energy/Fatigue', type: 'icf' },
+          { key: 'bf_ob_b152', label: 'b152 Emotional Functions', type: 'icf' },
+          { key: 'bf_ob_b134', label: 'b134 Sleep Functions', type: 'icf' },
+        ]},
+        { cat: 'Outcome Measures', fields: [
+          { key: 'om_base_ODI', label: 'ODI (Baseline)', type: 'num' },
+          { key: 'om_follow_ODI', label: 'ODI (Follow-up)', type: 'num' },
+          { key: 'om_base_DASH', label: 'DASH (Baseline)', type: 'num' },
+          { key: 'om_follow_DASH', label: 'DASH (Follow-up)', type: 'num' },
+          { key: 'om_base_WOMAC', label: 'WOMAC (Baseline)', type: 'num' },
+          { key: 'om_follow_WOMAC', label: 'WOMAC (Follow-up)', type: 'num' },
+          { key: 'om_base_NDI', label: 'NDI (Baseline)', type: 'num' },
+          { key: 'om_follow_NDI', label: 'NDI (Follow-up)', type: 'num' },
+          { key: 'om_base_PSFS', label: 'PSFS (Baseline)', type: 'num' },
+          { key: 'om_follow_PSFS', label: 'PSFS (Follow-up)', type: 'num' },
+          { key: 'om_base_PHQ9', label: 'PHQ-9 (Baseline)', type: 'num' },
+          { key: 'om_follow_PHQ9', label: 'PHQ-9 (Follow-up)', type: 'num' },
+          { key: 'om_base_GAD7', label: 'GAD-7 (Baseline)', type: 'num' },
+          { key: 'om_follow_GAD7', label: 'GAD-7 (Follow-up)', type: 'num' },
+        ]},
+        { cat: 'Special Tests', fields: [
+          { key: 'st_2', label: 'TUG Test (sec)', type: 'num' },
+          { key: 'st_3', label: '6MWT (meters)', type: 'num' },
+          { key: 'st_4', label: 'Single Leg Stance (sec)', type: 'num' },
+          { key: 'st_5', label: 'SLR Test', type: 'text' },
+        ]},
+        { cat: 'Obesity Assessment', fields: [
+          { key: 'ob_body_fat', label: 'Body Fat %', type: 'num' },
+          { key: 'ob_borg', label: 'Dyspnea (Borg)', type: 'num' },
+          { key: 'ob_fatigue', label: 'Fatigue Level', type: 'num' },
+          { key: 'ob_steps', label: 'Daily Steps', type: 'num' },
+          { key: 'ob_sts', label: '30-sec Sit-to-Stand', type: 'num' },
+          { key: 'ob_6mwt', label: '6MWT (meters)', type: 'num' },
+          { key: 'ob_grip_r', label: 'Grip - Right (kg)', type: 'num' },
+          { key: 'ob_grip_l', label: 'Grip - Left (kg)', type: 'num' },
+          { key: 'ob_motivation', label: 'Motivation (0-10)', type: 'num' },
+        ]},
+      ];
+
+      function getDeltaClass(key, val1, val2) {
+        const n1 = parseFloat(val1);
+        const n2 = parseFloat(val2);
+        if (isNaN(n1) || isNaN(n2)) return 'delta-na';
+        if (n1 === n2) return 'delta-unchanged';
+        const painKeys = ['pain_rest','pain_nrs_rest','pain_nrs_move','bf_msk_b280','bf_ob_b420',
+          'om_base_ODI','om_follow_ODI','om_base_DASH','om_follow_DASH','om_base_WOMAC','om_follow_WOMAC',
+          'om_base_NDI','om_follow_NDI','om_base_PHQ9','om_follow_PHQ9','om_base_GAD7','om_follow_GAD7',
+          'ob_borg','ob_fatigue','st_2'];
+        const funcKeys = ['weight','bmi','hr','spo2','ob_steps','ob_sts','ob_6mwt','ob_grip_r','ob_grip_l',
+          'ob_motivation','ob_body_fat','st_3','st_4',
+          'bf_msk_b710','bf_msk_b730','bf_msk_b740','bf_msk_b770','bf_msk_b780',
+          'bf_ob_b130','bf_ob_b134','bf_ob_b152'];
+
+        if (painKeys.includes(key)) {
+          return n2 < n1 ? 'delta-improved' : n2 > n1 ? 'delta-worsened' : 'delta-unchanged';
+        }
+        if (funcKeys.includes(key)) {
+          if (['weight','bmi'].includes(key)) return n2 < n1 ? 'delta-improved' : n2 > n1 ? 'delta-worsened' : 'delta-unchanged';
+          return n2 > n1 ? 'delta-improved' : n2 < n1 ? 'delta-worsened' : 'delta-unchanged';
+        }
+        return 'delta-na';
+      }
+
+      function getDeltaArrow(key, val1, val2) {
+        const cls = getDeltaClass(key, val1, val2);
+        if (cls === 'delta-improved') return '▲';
+        if (cls === 'delta-worsened') return '▼';
+        if (cls === 'delta-unchanged') return '—';
+        return '';
+      }
+
+      function formatVal(val, type) {
+        if (val === undefined || val === null || val === '') return '<span style="color:var(--gray-300)">—</span>';
+        return val;
+      }
+
+      const rowsHtml = comparisonFields.map(section => {
+        const fieldRows = section.fields.map(f => {
+          const vals = evals.map(ev => ev.data ? ev.data[f.key] : '');
+
+          return `<tr>
+            <td class="label-cell">${f.label}</td>
+            ${vals.map(v => `<td class="val-cell">${formatVal(v, f.type)}</td>`).join('')}
+          </tr>`;
+        }).join('');
+
+        return `<tr class="cat-header"><td colspan="${evals.length + 1}">${section.cat}</td></tr>${fieldRows}`;
+      }).join('');
+
+      const headerCols = evals.map(ev => `<th style="text-align:center;min-width:110px">${ev.eval_type}<br><span style="font-weight:400;font-size:9px">${ev.eval_date}</span></th>`).join('');
+
+      return `<div class="section" id="sec-comparison">
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-header">
+            <div class="card-title">📊 Progress Charts</div>
+            <span style="font-size:11px;color:var(--secondary-label)">${evals.length} evaluations</span>
+          </div>
+          <div class="chart-toggle" id="chart-toggles">
+            <button class="active" onclick="toggleChartTab(this,'pain')">Pain</button>
+            <button onclick="toggleChartTab(this,'vitals')">Vitals & BMI</button>
+            <button onclick="toggleChartTab(this,'outcomes')">Outcome Scores</button>
+            <button onclick="toggleChartTab(this,'functional')">Functional Tests</button>
+            <button onclick="toggleChartTab(this,'obesity')">Obesity</button>
+          </div>
+          <div id="chart-area-pain" class="charts-grid">
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">🔴</span> Pain at Rest (NRS)</div>
+              <canvas id="chart_pain_rest"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">🟠</span> Pain with Movement (NRS)</div>
+              <canvas id="chart_pain_move"></canvas>
+            </div>
+          </div>
+          <div id="chart-area-vitals" class="charts-grid" style="display:none">
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">⚖️</span> BMI Trend</div>
+              <canvas id="chart_bmi"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">❤️</span> Heart Rate</div>
+              <canvas id="chart_hr"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">🫁</span> SpO2</div>
+              <canvas id="chart_spo2"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">📏</span> Weight (kg)</div>
+              <canvas id="chart_weight"></canvas>
+            </div>
+          </div>
+          <div id="chart-area-outcomes" class="charts-grid" style="display:none">
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">🦴</span> ODI / NDI</div>
+              <canvas id="chart_odindi"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">💪</span> DASH / WOMAC</div>
+              <canvas id="chart_dashwomac"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">🧠</span> PHQ-9 / GAD-7</div>
+              <canvas id="chart_mh"></canvas>
+            </div>
+          </div>
+          <div id="chart-area-functional" class="charts-grid" style="display:none">
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">🏃</span> TUG Test (sec)</div>
+              <canvas id="chart_tug"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">🚶</span> 6MWT (meters)</div>
+              <canvas id="chart_6mwt"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">🦵</span> Sit-to-Stand (30s)</div>
+              <canvas id="chart_sts"></canvas>
+            </div>
+          </div>
+          <div id="chart-area-obesity" class="charts-grid" style="display:none">
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">📊</span> Body Fat %</div>
+              <canvas id="chart_fat"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">✊</span> Grip Strength (kg)</div>
+              <canvas id="chart_grip"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title"><span class="chart-icon">👟</span> Daily Steps</div>
+              <canvas id="chart_steps"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📋 Detailed Comparison Table</div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th style="text-align:left">Parameter</th>
+                  ${headerCols}
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    const chartInstances = {};
+
+    function toggleChartTab(btn, tabId) {
+      document.querySelectorAll('.chart-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      ['pain','vitals','outcomes','functional','obesity'].forEach(id => {
+        const el = document.getElementById('chart-area-' + id);
+        if (el) el.style.display = id === tabId ? 'grid' : 'none';
+      });
+    }
+
+    function renderComparisonCharts() {
+      if (typeof Chart === 'undefined') return;
+      const evals = getEvaluations();
+      if (evals.length < 2) return;
+
+      const labels = evals.map(ev => ev.eval_type + '\n' + ev.eval_date);
+      const dates = evals.map(ev => ev.eval_date);
+
+      // Destroy old charts
+      Object.values(chartInstances).forEach(c => { try { c.destroy(); } catch(e) {} });
+      Object.keys(chartInstances).forEach(k => delete chartInstances[k]);
+
+      const gridColor = '#e2e8f0';
+      const defaultOpts = {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false, position: 'top', labels: { font: { size: 11, family: "'Noto Sans',sans-serif" }, padding: 12 } },
+          tooltip: {
+            backgroundColor: '#1e293b', titleFont: { size: 11 }, bodyFont: { size: 11 },
+            padding: 8, cornerRadius: 6, displayColors: true,
+            callbacks: { title: (items) => items[0]?.label?.replace('\n',' ') || '' }
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 10, family: "'Noto Sans',sans-serif" }, color: '#64748b', maxRotation: 45 } },
+          y: { grid: { color: gridColor }, ticks: { font: { size: 10 }, color: '#64748b' } }
+        },
+        elements: { point: { radius: 5, hoverRadius: 7, borderWidth: 2 }, line: { tension: 0.3, borderWidth: 2.5 } }
+      };
+
+      function makeDataset(key, label, color, fill) {
+        const data = evals.map(ev => {
+          const v = ev.data ? ev.data[key] : '';
+          return (v === '' || v === undefined || v === null) ? null : parseFloat(v);
+        });
+        const hasData = data.some(v => v !== null);
+        if (!hasData) return null;
+        return {
+          label, data,
+          borderColor: color, backgroundColor: fill ? color + '18' : 'transparent',
+          fill: !!fill, pointBackgroundColor: '#fff', pointBorderColor: color
+        };
+      }
+
+      function createLine(canvasId, datasets, opts) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const validDs = datasets.filter(Boolean);
+        if (validDs.length === 0) return;
+        const mergedOpts = JSON.parse(JSON.stringify(defaultOpts));
+        if (opts) Object.keys(opts).forEach(k => { if (k === 'scales' && opts.scales) { Object.assign(mergedOpts.scales, opts.scales); } else { mergedOpts[k] = opts[k]; } });
+        chartInstances[canvasId] = new Chart(canvas.getContext('2d'), {
+          type: 'line', data: { labels, datasets: validDs }, options: mergedOpts
+        });
+      }
+
+      // Pain charts
+      const dsPainRest = makeDataset('pain_nrs_rest', 'Pain at Rest', '#dc2626', true);
+      const dsPainMove = makeDataset('pain_nrs_move', 'Pain w/ Movement', '#f97316', true);
+      const dsBf280 = makeDataset('bf_msk_b280', 'b280 Pain (ICF)', '#e11d48', false);
+      createLine('chart_pain_rest', [dsPainRest, dsBf280]);
+      const dsPainRest2 = makeDataset('pain_nrs_rest', 'Pain at Rest', '#dc2626', false);
+      createLine('chart_pain_move', [dsPainMove, dsPainRest2]);
+
+      // Vitals charts
+      createLine('chart_bmi', [makeDataset('bmi', 'BMI', '#0891b2', true)]);
+      createLine('chart_hr', [makeDataset('hr', 'Heart Rate', '#dc2626', true), makeDataset('bp_systolic', 'Systolic BP', '#3b82f6', false)]);
+      createLine('chart_spo2', [makeDataset('spo2', 'SpO2 %', '#059669', true)], { scales: { y: { min: 80, max: 100 } } });
+      createLine('chart_weight', [makeDataset('weight', 'Weight kg', '#7c3aed', true)]);
+
+      // Outcome charts
+      createLine('chart_odindi', [
+        makeDataset('om_follow_ODI', 'ODI', '#dc2626', true),
+        makeDataset('om_follow_NDI', 'NDI', '#3b82f6', true)
+      ]);
+      createLine('chart_dashwomac', [
+        makeDataset('om_follow_DASH', 'DASH', '#f97316', true),
+        makeDataset('om_follow_WOMAC', 'WOMAC', '#7c3aed', true)
+      ]);
+      createLine('chart_mh', [
+        makeDataset('om_follow_PHQ9', 'PHQ-9', '#dc2626', true),
+        makeDataset('om_follow_GAD7', 'GAD-7', '#3b82f6', true)
+      ]);
+
+      // Functional charts
+      createLine('chart_tug', [makeDataset('st_2', 'TUG (sec)', '#f97316', true)]);
+      createLine('chart_6mwt', [makeDataset('st_3', '6MWT', '#059669', true), makeDataset('ob_6mwt', '6MWT (Obesity)', '#0891b2', false)]);
+      createLine('chart_sts', [makeDataset('ob_sts', 'Sit-to-Stand', '#7c3aed', true)]);
+
+      // Obesity charts
+      createLine('chart_fat', [makeDataset('ob_body_fat', 'Body Fat %', '#dc2626', true)]);
+      createLine('chart_grip', [
+        makeDataset('ob_grip_r', 'Grip Right', '#0891b2', true),
+        makeDataset('ob_grip_l', 'Grip Left', '#3b82f6', true)
+      ]);
+      createLine('chart_steps', [makeDataset('ob_steps', 'Daily Steps', '#059669', true)]);
+    }
+
     function showSection(id) {
       const sections = document.querySelectorAll('.section');
       sections.forEach(s => {
@@ -2908,25 +4426,58 @@
       countSpan.textContent = patients.length;
 
       if (patients.length === 0) {
-        container.innerHTML = '<div class="no-patients">No patients yet.<br>Save your first patient!</div>';
+        container.innerHTML = '<div class="no-patients"><div class="empty-icon">&#129657;</div>No patients yet.<br><span style="font-size:12px;color:var(--gray-300)">Save your first patient to get started!</span></div>';
         return;
       }
 
       patients.sort((a, b) => (a.caseId || '').localeCompare(b.caseId || '', undefined, { numeric: true }));
 
+      const avatarColors = ['#0891b2','#3b82f6','#7c3aed','#059669','#d97706','#dc2626','#ec4899','#8b5cf6','#06b6d4','#10b981'];
+      function getAvatarColor(name) {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        return avatarColors[Math.abs(hash) % avatarColors.length];
+      }
+      function getInitials(name) {
+        const parts = name.trim().split(/\s+/);
+        if (parts.length >= 2) return (parts[0][0] + parts[1][0]);
+        return parts[0].substring(0, 2);
+      }
+
       container.innerHTML = patients.map(p => {
         let patientName = p.name || 'Unknown';
-        if (patientName === 'Unknown' && p.data) {
-          try { const parsed = JSON.parse(p.data); patientName = parsed.name || 'Unknown'; } catch(e) {}
+        let assessmentDate = null;
+        let diagnosis = '';
+        if (p.data) {
+          try {
+            const parsed = JSON.parse(p.data);
+            if (patientName === 'Unknown') patientName = parsed.name || 'Unknown';
+            assessmentDate = parsed.assessment_date || null;
+            diagnosis = parsed.diagnosis || parsed.primary_diagnosis || '';
+          } catch(e) {}
         }
-        const dateStr = p.date ? new Date(p.date).toLocaleDateString() : 'N/A';
+        const dateStr = assessmentDate || (p.date ? new Date(p.date).toISOString().split('T')[0] : '');
         const caseId = p.caseId || '';
+        let evalCount = 0;
+        try { const parsed = JSON.parse(p.data); evalCount = (parsed.evaluations || []).length; } catch(e) {}
+        const isActive = activePatientCaseId === caseId;
+        const evalBadge = evalCount > 0 ? `<span class="eval-count">${evalCount} eval${evalCount!==1?'s':''}</span>` : '';
+        const initials = getInitials(patientName);
+        const avatarColor = getAvatarColor(patientName);
 
         return `
-          <div class="patient-item-sidebar" data-name="${patientName.toLowerCase()}" data-id="${caseId.toLowerCase()}" onclick="loadPatientData('${caseId}')">
-            <div class="name">${patientName}</div>
-            <div class="meta">${caseId} · ${dateStr}</div>
-            <button class="delete-btn" onclick="event.stopPropagation(); deletePatient('${caseId}')" title="Delete">✕</button>
+          <div class="patient-item-sidebar${isActive ? ' selected' : ''}" data-name="${patientName.toLowerCase()}" data-id="${caseId.toLowerCase()}" onclick="loadPatientData('${caseId}')">
+            <div class="patient-avatar" style="background:${avatarColor}">${initials}</div>
+            <div class="patient-info">
+              <div class="name">${patientName}</div>
+              <div class="meta">
+                <span class="case-id">${caseId}</span>
+                ${dateStr ? `<span class="dot">&middot;</span><span class="date">${dateStr}</span>` : ''}
+                ${evalBadge}
+              </div>
+              ${diagnosis ? `<div class="diagnosis">${diagnosis}</div>` : ''}
+            </div>
+            <button class="delete-btn" onclick="event.stopPropagation(); deletePatient('${caseId}')" title="Delete">&#10005;</button>
           </div>
         `;
       }).join('');
@@ -2939,12 +4490,10 @@
       items.forEach(item => {
         const name = item.getAttribute('data-name') || '';
         const id = item.getAttribute('data-id') || '';
-        if(!term || name.includes(term) || id.includes(term)) {
-          item.style.display = 'block';
-          visibleCount++;
-        } else {
-          item.style.display = 'none';
-        }
+        const match = !term || name.includes(term) || id.includes(term);
+        item.style.display = match ? 'flex' : 'none';
+        item.style.opacity = match ? '1' : '0';
+        if (match) visibleCount++;
       });
       document.getElementById('patients-count').textContent = visibleCount;
     }
@@ -2960,9 +4509,12 @@
         localStorage.setItem('pt_patients', JSON.stringify(patients));
         if (formData.case_id === caseId) {
           formData = {};
+          activeEvalId = null;
+          activePatientCaseId = null;
           localStorage.removeItem('pt_icf_data');
           try { await dbSaveCurrent(); } catch(e) {}
           buildSections();
+          renderTimeline();
         }
         await renderPatientsSidebar();
         showNotification('Patient deleted successfully from local and cloud!', 'success');
