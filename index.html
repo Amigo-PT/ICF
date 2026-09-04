@@ -163,6 +163,13 @@
       60% { transform: translateX(-6px); }
       80% { transform: translateX(6px); }
     }
+    .app-container.shake-perm { animation: shake 0.4s var(--ease); }
+    @keyframes denyFlash {
+      0% { background: rgba(229,72,77,0); }
+      30% { background: rgba(229,72,77,0.15); border: 2px solid rgba(229,72,77,0.5); }
+      100% { background: rgba(229,72,77,0); }
+    }
+    .app-container.deny-flash { animation: denyFlash 0.6s var(--ease); }
     .lock-icon {
       width: 72px; height: 72px;
       background: linear-gradient(135deg, #FF6900, #FF4876);
@@ -198,6 +205,12 @@
     #doctor-screen .lock-box h2::before { content: 'Select Therapist'; font-size: 20px; font-family: var(--font); font-weight: 700; }
     #doctor-screen .lock-box p { font-size: 0; }
     #doctor-screen .lock-box p::before { content: 'Choose your name to continue'; font-size: 13px; color: var(--secondary-label); }
+
+    /* ================ PASSWORD SCREEN ================ */
+    #password-screen .lock-icon svg { width: 30px; height: 30px; stroke: #fff; fill: none; }
+    #password-screen .lock-box h2::before { content: 'Enter Password'; font-size: 20px; font-family: var(--font); font-weight: 700; }
+    #password-screen .lock-box p { font-size: 0; }
+    #password-screen .lock-box p::before { content: 'Please enter your password to unlock'; font-size: 13px; color: var(--secondary-label); }
 
     /* ================ BUTTONS ================ */
     .btn {
@@ -326,11 +339,28 @@
       min-height: 0;
       display: flex; flex-direction: column; gap: 4px;
       scrollbar-width: thin;
-      scrollbar-color: var(--gray-300) transparent;
+      scrollbar-color: rgba(211,211,211,0.4) transparent;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      padding-right: 2px;
     }
-    .patients-list::-webkit-scrollbar { width: 4px; }
+    .patients-list::-webkit-scrollbar { width: 5px; }
     .patients-list::-webkit-scrollbar-track { background: transparent; }
-    .patients-list::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+    .patients-list::-webkit-scrollbar-thumb {
+      background: rgba(211,211,211,0.45);
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background-clip: content-box;
+      transition: background 0.2s var(--ease);
+    }
+    .patients-list::-webkit-scrollbar-thumb:hover { background: var(--gray-300); background-clip: content-box; }
+    .list-fade {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: 44px;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0.95));
+    }
     .patient-item-sidebar {
       padding: 10px 12px;
       cursor: pointer; border-radius: 14px;
@@ -339,6 +369,11 @@
       border: 1.5px solid transparent;
       display: flex; align-items: flex-start; gap: 10px;
       background: transparent;
+      animation: itemIn 0.3s var(--ease);
+    }
+    @keyframes itemIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .patient-item-sidebar:hover {
       background: var(--gray-50);
@@ -721,58 +756,56 @@
 
     /* ================ NAVIGATION (sliding pill) ================ */
     .nav-tabs {
-      display: flex; gap: 2px;
-      margin-bottom: 24px; padding: 4px;
-      background: var(--gray-100);
-      border: 1px solid var(--gray-200);
-      border-radius: 14px;
-      overflow-x: auto;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+      margin-bottom: 28px; padding: 6px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.45));
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 18px;
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      box-shadow: 0 8px 24px rgba(23,23,23,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
       position: relative;
-      scrollbar-width: thin;
-      scrollbar-color: var(--gray-300) transparent;
     }
     .nav-btn {
-      flex: 1; min-width: fit-content;
-      padding: 8px 16px; border: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 9px 16px; border: none;
       background: transparent;
-      border-radius: 10px;
-      font-size: 12px; font-weight: 500;
+      border-radius: 12px;
+      font-size: 12px; font-weight: 700;
       font-family: var(--font);
+      letter-spacing: 0.2px;
       color: var(--gray-500);
-      cursor: pointer; transition: color 0.2s var(--ease);
+      cursor: pointer;
+      transition: all 0.28s var(--ease-spring);
       white-space: nowrap;
       position: relative;
-      z-index: 1;
+      -webkit-tap-highlight-color: transparent;
     }
-    .nav-btn:hover { color: var(--gray-700); }
+    .nav-btn:hover {
+      color: var(--primary-dark);
+      background: rgba(255,105,0,0.07);
+      transform: translateY(-1px);
+    }
+    .nav-btn:active {
+      transform: scale(0.94);
+    }
     .nav-btn.active {
-      color: #FF6900;
+      color: #fff;
       font-weight: 700;
+      background: linear-gradient(135deg, #FF6900 0%, #FF4876 55%, #E25E00 100%);
+      box-shadow: 0 6px 16px rgba(255,105,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35);
     }
     .nav-btn.active::after {
       content: '';
       position: absolute;
-      bottom: 4px; left: 50%;
+      bottom: 3px; left: 50%;
       transform: translateX(-50%);
-      width: 14px; height: 3px;
-      background: #FF6900;
+      width: 16px; height: 3px;
+      background: rgba(255,255,255,0.85);
       border-radius: 3px;
     }
-    .nav-indicator {
-      position: absolute;
-      top: 4px; bottom: 4px; left: 0;
-      width: 0;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(23,23,23,0.08);
-      opacity: 0;
-      transition: transform 0.4s var(--ease), width 0.4s var(--ease), opacity 0.25s var(--ease);
-      z-index: 0;
-    }
-    .nav-tabs::-webkit-scrollbar { height: 4px; }
-    .nav-tabs::-webkit-scrollbar-track { background: transparent; }
-    .nav-tabs::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
-    .nav-tabs::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+    .nav-btn:not(.active):not(:hover) { opacity: 0.85; }
+    .nav-btn:not(.active):not(:hover):active { opacity: 1; }
 
     /* ================ SECTIONS ================ */
     .section { display: none; position: relative; }
@@ -1575,23 +1608,15 @@
         <h2>Select Therapist</h2>
         <p>Choose your name to continue</p>
         <div class="doctor-list" id="doctor-list">
-          <div class="doctor-option" onclick="selectDoctor('Dr. Hind Mohamed Elsharif')">
-            <div class="avatar">H</div>
+          <div class="doctor-option" onclick="selectDoctorForLogin('Amigo')">
+            <div class="avatar">A</div>
             <div class="doc-info">
-              <div class="doc-name">Dr. Hind Mohamed Elsharif</div>
+              <div class="doc-name">Amigo</div>
               <div class="doc-title">Physical Therapist</div>
             </div>
             <div class="doc-check"></div>
           </div>
-          <div class="doctor-option" onclick="selectDoctor('Dr. Mamdouh Abd Elaziz')">
-            <div class="avatar">M</div>
-            <div class="doc-info">
-              <div class="doc-name">Dr. Mamdouh Abd Elaziz</div>
-              <div class="doc-title">Physical Therapist</div>
-            </div>
-            <div class="doc-check"></div>
-          </div>
-          <div class="doctor-option" onclick="selectDoctor('Dr. Ahmed Khaled')">
+          <div class="doctor-option" onclick="selectDoctorForLogin('Dr. Ahmed Khaled')">
             <div class="avatar">A</div>
             <div class="doc-info">
               <div class="doc-name">Dr. Ahmed Khaled</div>
@@ -1599,30 +1624,24 @@
             </div>
             <div class="doc-check"></div>
           </div>
-          <div class="doctor-option" onclick="selectDoctor('Dr. Mariam Tamer')">
-            <div class="avatar">M</div>
-            <div class="doc-info">
-              <div class="doc-name">Dr. Mariam Tamer</div>
-              <div class="doc-title">Physical Therapist</div>
-            </div>
-            <div class="doc-check"></div>
-          </div>
-          <div class="doctor-option" onclick="selectDoctor('Dr. Aisha')">
-            <div class="avatar">A</div>
-            <div class="doc-info">
-              <div class="doc-name">Dr. Aisha</div>
-              <div class="doc-title">Physical Therapist</div>
-            </div>
-            <div class="doc-check"></div>
-          </div>
-          <div class="doctor-option" onclick="selectDoctor('Dr. Shiam')">
-            <div class="avatar">S</div>
-            <div class="doc-info">
-              <div class="doc-name">Dr. Shiam</div>
-              <div class="doc-title">Physical Therapist</div>
-            </div>
-            <div class="doc-check"></div>
-          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Doctor Password Screen -->
+  <div id="password-screen" class="lock-screen" style="display:none">
+    <div class="lock-box">
+      <div class="doctor-picker">
+        <div class="lock-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <h2>Enter Password</h2>
+        <p>Please enter your password to unlock</p>
+        <div id="pw-doctor-name" style="font-size:14px;font-weight:700;color:var(--label);margin-bottom:16px"></div>
+        <input type="password" id="doctor-password-input" class="form-input" placeholder="Password" style="width:100%;text-align:center;font-size:16px;letter-spacing:2px;margin-bottom:14px" onkeydown="if(event.key==='Enter')verifyDoctorPassword()">
+        <div id="pw-error-msg" style="font-size:12px;color:var(--danger,#e5484d);margin-bottom:10px;min-height:16px;font-weight:600"></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline" style="flex:1" onclick="showDoctorList()">Back</button>
+          <button class="btn btn-success" style="flex:1" onclick="verifyDoctorPassword()">Unlock</button>
         </div>
       </div>
     </div>
@@ -1639,16 +1658,17 @@
         <button class="btn-action" onclick="exportAllToJSON()" title="Export All">&#128190; Export</button>
         <button class="btn-action" onclick="importFromJSON()" title="Import">&#128194; Import</button>
         <button class="btn-action sync" id="sync-all-btn" onclick="syncAllPatientsToCloud()" title="Sync to Cloud">&#9729; Sync</button>
-        <button class="btn-action pull" id="pull-btn" onclick="fetchAndRefreshFromCloud()" title="Pull from Cloud">&#8681; Pull</button>
+        <button class="btn-action pull" id="pull-btn" onclick="showPullOverlay(); fetchAndRefreshFromCloud().finally(hidePullOverlay)" title="Pull from Cloud">&#8681; Pull</button>
       </div>
       <div class="search-wrapper">
         <span class="search-icon">&#128269;</span>
         <input type="text" class="search-field" id="patient-search" placeholder="Search patients..." oninput="filterPatients(this.value)">
       </div>
       <div id="sync-timestamp" style="font-size:10px;color:var(--sf-gray);padding:0 4px 4px"></div>
-      <div class="patients-list">
+      <div class="patients-list" id="patients-list">
         <div id="patients-sidebar-list"></div>
       </div>
+      <div class="list-fade"></div>
     </div>
 
     <!-- Main -->
@@ -1659,7 +1679,6 @@
           <h1>ICF Assessment</h1>
           <div class="header-sub">
             <span>Physical Therapy · ICF Model</span>
-            <div class="designer-badge">✎ Dr. Mamdouh Abd Elaziz</div>
             <div class="selected-doctor-info" id="selected-doctor-info" onclick="showDoctorPicker()" title="Change therapist">
               <span class="mini-avatar" id="doc-avatar-letter">?</span>
               <span id="doc-name-display">Select Doctor</span>
@@ -1769,6 +1788,15 @@
     }
 
     // ---- Evaluation Management ----
+    function reconcileEvalDates(data) {
+      if (!data || !Array.isArray(data.evaluations)) return data;
+      data.evaluations.forEach(ev => {
+        const ad = ev.data && ev.data.assessment_date;
+        if (ad) ev.eval_date = ad;
+      });
+      return data;
+    }
+
     function generateEvalId() {
       return 'eval_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
     }
@@ -1866,6 +1894,13 @@
         // Load evaluation data (deep cloned)
         const evalData = deepClone(ev.data || {});
         Object.assign(formData, evalData);
+
+        // Restore this evaluation's own therapist signature
+        if (ev.sig_therapist) {
+          formData.sig_therapist = ev.sig_therapist;
+        } else if (ev.therapist_name) {
+          formData.sig_therapist = ev.therapist_name;
+        }
 
         // Ensure evals array and active ID are set
         formData.evaluations = evals;
@@ -1975,6 +2010,7 @@
           eval_date: evalDate || new Date().toISOString().split('T')[0],
           eval_type: evalType || 'Re-evaluation',
           therapist_name: selectedDoctor || '',
+          sig_therapist: selectedDoctor || '',
           data: {}
         };
 
@@ -1992,6 +2028,8 @@
         // Set assessment date to the new eval date
         formData.assessment_date = newEval.eval_date;
         formData.therapist = selectedDoctor || '';
+        // New evaluation gets the current doctor's signature
+        formData.sig_therapist = selectedDoctor || '';
 
         localStorage.setItem('pt_icf_data', JSON.stringify(formData));
         await dbSaveCurrent();
@@ -2014,12 +2052,17 @@
       const dynamicData = extractDynamicData(formData);
 
       if (activeEvalId) {
-        // Update existing active evaluation — preserve its original eval_date
+        // Update existing active evaluation
         const idx = evals.findIndex(e => e.eval_id === activeEvalId);
         if (idx >= 0) {
           evals[idx].data = dynamicData;
           evals[idx].therapist_name = formData.therapist || selectedDoctor || evals[idx].therapist_name;
-          // Do NOT overwrite eval_date here — it should only change via switchEvaluation or createNewEvaluation
+          // Per-evaluation therapist signature
+          evals[idx].sig_therapist = formData.sig_therapist || selectedDoctor || evals[idx].sig_therapist;
+          // Sync the timeline date with the Assessment Date field when it changes
+          if (formData.assessment_date) {
+            evals[idx].eval_date = formData.assessment_date;
+          }
         }
       } else {
         // Create new evaluation from current data
@@ -2028,6 +2071,7 @@
           eval_date: formData.assessment_date || new Date().toISOString().split('T')[0],
           eval_type: 'Baseline',
           therapist_name: formData.therapist || selectedDoctor || '',
+          sig_therapist: formData.sig_therapist || selectedDoctor || '',
           data: dynamicData
         };
         if (!formData.evaluations) formData.evaluations = [];
@@ -2203,6 +2247,8 @@
         // Save this fallback into IndexedDB current store for next time
         dbSaveCurrent();
       }
+      // Sync timeline dates with each evaluation's own Assessment Date
+      reconcileEvalDates(formData || {});
       // Ensure therapist signature is filled from selected doctor
       if (selectedDoctor && formData && !formData.sig_therapist) {
         formData.sig_therapist = selectedDoctor;
@@ -2263,6 +2309,7 @@
     }
 
     async function exportAllToJSON() {
+      if (!canDo('export')) { denyPermission(); return; }
       try {
         const all = await dbGetAllPatients();
         if (all.length === 0) { showNotification('No patients to export', 'warning'); return; }
@@ -2276,6 +2323,7 @@
     }
 
     function importFromJSON() {
+      if (!canDo('import')) { denyPermission(); return; }
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = '.json';
@@ -2382,6 +2430,10 @@
     }
 
     function fd(id, val) {
+      if (id === 'sig_therapist' && !canDo('edit_signature')) {
+        denyPermission();
+        return;
+      }
       formData[id] = val;
       updateProgress();
       autoSave();
@@ -2527,18 +2579,24 @@
       const origText = btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = '⏳ Pulling...';
+      updatePullProgress({ phase: 'fetch', percent: 5, title: 'Connecting to Cloud...', subtitle: 'Contacting the server to fetch the latest patient records.' });
       try {
         const response = await fetch(GOOGLE_SCRIPT_URL);
+        updatePullProgress({ phase: 'fetch', percent: 25, title: 'Receiving Data...', subtitle: 'Cloud response received. Preparing records.' });
         const cloudPatients = await response.json();
         if (cloudPatients.status === "error") {
+          updatePullProgress({ phase: 'error', percent: 100, title: 'Sync Failed', subtitle: cloudPatients.message || 'Cloud error.' });
           showNotification('Cloud error: ' + cloudPatients.message, 'error');
           return;
         }
         if (!Array.isArray(cloudPatients) || cloudPatients.length === 0) {
+          updatePullProgress({ phase: 'done', percent: 100, title: 'Nothing to Sync', subtitle: 'No data found on the cloud sheet.' });
           showNotification('No data found on the cloud sheet.', 'warning');
           return;
         }
         let addedCount = 0;
+        const total = cloudPatients.length;
+        const range = total > 0 ? (80 / total) : 0;
         for (const item of cloudPatients) {
           const caseId = item.case_id || item.caseId;
           if (!caseId) continue;
@@ -2549,12 +2607,15 @@
             data: JSON.stringify(item)
           };
           try { await dbPutPatient(patientRecord); addedCount++; } catch(e) {}
+          updatePullProgress({ phase: 'process', percent: 25 + (range * addedCount), title: `Downloading Records... (${addedCount}/${total})`, subtitle: `Saving patient "${patientRecord.name}" locally.` });
         }
+        updatePullProgress({ phase: 'done', percent: 100, title: 'Sync Complete', subtitle: `${addedCount} records updated locally.` });
         markSyncNow();
         showNotification(`Local database updated with ${addedCount} records from Cloud!`, 'success');
         await renderPatientsSidebar();
       } catch (error) {
         console.error("Error fetching from cloud:", error);
+        updatePullProgress({ phase: 'error', percent: 100, title: 'Sync Failed', subtitle: 'Check your connection and try again.' });
         showNotification('Failed to pull data from cloud. Check connection.', 'error');
       } finally {
         btn.disabled = false;
@@ -2763,6 +2824,7 @@
               eval_date: loadedData.assessment_date || patient.date ? new Date(patient.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
               eval_type: 'Baseline',
               therapist_name: loadedData.therapist || loadedData.sig_therapist || '',
+              sig_therapist: loadedData.sig_therapist || loadedData.therapist || '',
               data: dynamicData
             }];
             loadedData.activeEvalId = loadedData.evaluations[0].eval_id;
@@ -2771,6 +2833,7 @@
           formData = loadedData;
           activePatientCaseId = caseId;
           activeEvalId = evalId || formData.activeEvalId || (formData.evaluations.length > 0 ? formData.evaluations[formData.evaluations.length - 1].eval_id : null);
+          reconcileEvalDates(formData);
           
           // Load evaluation data with deep copy to avoid shared references
           const targetEvalId = evalId || activeEvalId;
@@ -2787,6 +2850,12 @@
               formData = staticData;
               // Load evaluation data (deep cloned)
               Object.assign(formData, deepClone(ev.data || {}));
+              // Restore this evaluation's own therapist signature
+              if (ev.sig_therapist) {
+                formData.sig_therapist = ev.sig_therapist;
+              } else if (ev.therapist_name) {
+                formData.sig_therapist = ev.therapist_name;
+              }
               formData.evaluations = loadedData.evaluations;
               formData.activeEvalId = activeEvalId;
               if (evalId) activeEvalId = evalId;
@@ -3991,7 +4060,7 @@
         </div>
         <div class="card" style="background:var(--sf-gray6)">
           <div class="form-grid grid-2">
-            <div class="form-group"><label class="form-label">Therapist Signature</label>${inp('sig_therapist','Name & signature')}</div>
+            <div class="form-group"><label class="form-label">Therapist Signature</label>${canDo('edit_signature') ? inp('sig_therapist','Name & signature') : `<div class="sig-lock-wrap" onclick="denyPermission()" style="position:relative;cursor:not-allowed"><input type="text" id="sig_therapist" class="form-input sig-locked" value="${formData['sig_therapist']||''}" readonly title="You do not have permission to edit the therapist signature" style="pointer-events:none;background:var(--gray-50);color:var(--gray-400);cursor:not-allowed"><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--danger,#e5484d);font-size:15px">🔒</span></div>`}</div>
             <div class="form-group"><label class="form-label">Date</label>${inp('sig_date','','date')}</div>
           </div>
         </div>
@@ -4004,20 +4073,7 @@
 
     function buildNav() {
       const nav = document.getElementById('nav-tabs');
-      nav.innerHTML = '<span class="nav-indicator" id="nav-indicator"></span>' + SECTIONS.map(s=>`<button class="nav-btn ${s.id===currentSection?'active':''}" onclick="showSection('${s.id}')">${s.label}</button>`).join('');
-      moveIndicator();
-    }
-
-    function moveIndicator() {
-      const nav = document.getElementById('nav-tabs');
-      const ind = document.getElementById('nav-indicator');
-      if (!nav || !ind) return;
-      const btn = nav.querySelector('.nav-btn.active');
-      if (!btn) { ind.style.opacity = '0'; return; }
-      const padding = parseFloat(getComputedStyle(nav).paddingLeft) || 0;
-      ind.style.width = btn.offsetWidth + 'px';
-      ind.style.transform = 'translateX(' + (btn.offsetLeft - padding) + 'px)';
-      ind.style.opacity = '1';
+      nav.innerHTML = SECTIONS.map(s=>`<button class="nav-btn ${s.id===currentSection?'active':''}" onclick="showSection('${s.id}')">${s.label}</button>`).join('');
     }
 
     function buildComparison() {
@@ -4412,11 +4468,9 @@
       document.querySelectorAll('.nav-btn').forEach((btn,i)=>{
         btn.classList.toggle('active', SECTIONS[i].id===id);
       });
-      moveIndicator();
     }
 
     initData();
-    window.addEventListener('resize', moveIndicator);
 
     async function renderPatientsSidebar() {
       updateSyncTimestamp();
@@ -4489,6 +4543,12 @@
           </div>
         `;
       }).join('');
+
+      // Re-apply the current search term so the filter stays active after refresh
+      const searchField = document.getElementById('patient-search');
+      if (searchField && searchField.value) {
+        filterPatients(searchField.value);
+      }
     }
 
     function filterPatients(searchTerm) {
@@ -4507,6 +4567,7 @@
     }
 
     async function deletePatient(caseId) {
+      if (!canDo('delete_patient')) { denyPermission(); return; }
       const confirmed = await showConfirmDialog('Delete this patient? This cannot be undone.');
       if (confirmed) {
         showNotification('Deleting from Cloud Grid...', 'info');
@@ -4719,31 +4780,59 @@
     window.addEventListener('online', () => { checkOnlineStatus(); showNotification('Internet connected', 'success'); });
     window.addEventListener('offline', () => { checkOnlineStatus(); showNotification('No internet — saving disabled', 'error'); });
 
-    // Initialize without PIN lock
+    // Initialize: require password before showing the app each time the page loads
     checkOnlineStatus();
-    if(selectedDoctor) {
-      document.querySelector('.app-container').style.display = 'grid';
-      updateDoctorDisplay();
-      showPullOverlay();
-      fetchAndRefreshFromCloud().finally(hidePullOverlay);
-    } else {
-      document.getElementById('doctor-screen').style.display = 'flex';
-    }
+    document.getElementById('doctor-screen').style.display = 'flex';
+    showPullOverlay();
+    fetchAndRefreshFromCloud().finally(hidePullOverlay);
 
     function showPullOverlay() {
       const overlay = document.createElement('div');
       overlay.id = 'auto-pull-overlay';
       overlay.style.cssText = 'position:fixed;inset:0;background:rgba(23,23,23,0.55);display:flex;align-items:center;justify-content:center;z-index:99999;animation:fadeIn 0.2s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)';
       overlay.innerHTML = `
-        <div style="background:var(--card-bg);border-radius:20px;padding:36px 32px;max-width:340px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.25);text-align:center">
+        <div style="background:var(--card-bg);border-radius:20px;padding:36px 32px;max-width:360px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.25);text-align:center">
           <div style="width:56px;height:56px;margin:0 auto 16px;border-radius:50%;background:linear-gradient(135deg,#FF6900,#E25E00);display:flex;align-items:center;justify-content:center;animation:pulse 1.5s ease-in-out infinite">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </div>
-          <div style="font-size:16px;font-weight:700;color:var(--label);margin-bottom:6px">Pulling Data...</div>
-          <div style="font-size:13px;color:var(--secondary-label);line-height:1.6">Syncing latest patient records from cloud.<br>Please wait.</div>
+          <div style="font-size:16px;font-weight:700;color:var(--label);margin-bottom:6px" id="pull-title">Syncing Data...</div>
+          <div style="font-size:13px;color:var(--secondary-label);line-height:1.6;margin-bottom:16px" id="pull-subtitle">Fetching latest patient records from cloud. Please wait.</div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--label)">
+            <span id="pull-progress-text">Connecting...</span>
+            <span id="pull-progress-pct">0%</span>
+          </div>
+          <div style="width:100%;height:8px;background:var(--gray-100);border-radius:6px;overflow:hidden">
+            <div id="pull-progress-bar" style="width:0%;height:100%;background:linear-gradient(90deg,#FF6900,#E25E00);border-radius:6px;transition:width 0.3s ease"></div>
+          </div>
         </div>
         <style>@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:0.8}}</style>`;
       document.body.appendChild(overlay);
+    }
+
+    function updatePullProgress(state) {
+      const overlay = document.getElementById('auto-pull-overlay');
+      if (!overlay) return;
+      const bar = overlay.querySelector('#pull-progress-bar');
+      const text = overlay.querySelector('#pull-progress-text');
+      const pct = overlay.querySelector('#pull-progress-pct');
+      const title = overlay.querySelector('#pull-title');
+      const sub = overlay.querySelector('#pull-subtitle');
+      if (!bar || !text || !pct) return;
+      const p = state.percent;
+      bar.style.width = Math.max(0, Math.min(100, p)) + '%';
+      pct.textContent = Math.round(p) + '%';
+      if (title) title.textContent = state.title || 'Syncing Data...';
+      if (sub) sub.textContent = state.subtitle || '';
+      if (state.label) text.textContent = state.label;
+      else {
+        switch (state.phase) {
+          case 'fetch': text.textContent = 'Requesting data...'; break;
+          case 'process': text.textContent = 'Downloading records...'; break;
+          case 'done': text.textContent = 'Done ✓'; break;
+          case 'error': text.textContent = 'Failed'; break;
+        }
+      }
+      if (p >= 100) { bar.style.background = 'linear-gradient(90deg,#22C55E,#16A34A)'; }
     }
 
     function hidePullOverlay() {
@@ -4752,16 +4841,109 @@
     }
 
     document.getElementById('doctor-screen').addEventListener('click', function(e) {
-      if(e.target === this && selectedDoctor) {
+      if(e.target === this) {
         this.style.display = 'none';
+        setTimeout(() => { this.style.display = 'flex'; }, 80);
       }
     });
 
     // Doctor Selection
+    const DOCTOR_PASSWORDS = {
+      "Dr. Ahmed Khaled": "200802",
+      "Amigo": "N7418293"
+    };
+
+    const DOCTOR_PERMISSIONS = {
+      "Amigo": { admin: true, delete_patient: true, export: true, import: true, edit_signature: true },
+      "Dr. Ahmed Khaled": { admin: false, delete_patient: false, export: false, import: false, edit_signature: false }
+    };
+
+    function canDo(perm) {
+      const perms = DOCTOR_PERMISSIONS[selectedDoctor];
+      if (!perms) return true;
+      if (perms.admin) return true;
+      return !!perms[perm];
+    }
+
+    function denyPermission() {
+      const existing = document.querySelector('.deny-notification');
+      if (existing) existing.remove();
+      const notif = document.createElement('div');
+      notif.className = 'notification error deny-notification';
+      notif.innerHTML = '<span style="font-size:18px;opacity:0.9">⛔</span> <b>Access Denied:</b> You do not have permission to perform this action.';
+      document.body.appendChild(notif);
+      setTimeout(() => {
+        notif.style.animation = 'notifOut 0.25s ease forwards';
+        setTimeout(() => notif.remove(), 250);
+      }, 6000);
+      const box = document.querySelector('#password-screen .lock-box');
+      const target = document.querySelector('.app-container');
+      if (target) {
+        target.classList.add('shake-perm');
+        setTimeout(() => target.classList.remove('shake-perm'), 400);
+        target.classList.add('deny-flash');
+        setTimeout(() => target.classList.remove('deny-flash'), 600);
+      }
+      if (box) {
+        box.classList.remove('shake');
+        void box.offsetWidth;
+        box.classList.add('shake');
+      }
+    }
+
+    let pendingLoginDoctor = null;
+
+    function selectDoctorForLogin(name) {
+      if (!DOCTOR_PASSWORDS.hasOwnProperty(name)) {
+        // No password required for this doctor
+        selectDoctor(name);
+        return;
+      }
+      pendingLoginDoctor = name;
+      document.getElementById('pw-doctor-name').textContent = name;
+      const input = document.getElementById('doctor-password-input');
+      if (input) { input.value = ''; }
+      const err = document.getElementById('pw-error-msg');
+      if (err) err.textContent = '';
+      document.getElementById('doctor-screen').style.display = 'none';
+      document.getElementById('password-screen').style.display = 'flex';
+      if (input) setTimeout(() => input.focus(), 100);
+    }
+
+    function showDoctorList() {
+      document.getElementById('password-screen').style.display = 'none';
+      document.getElementById('doctor-screen').style.display = 'flex';
+      pendingLoginDoctor = null;
+    }
+
+    function verifyDoctorPassword() {
+      const input = document.getElementById('doctor-password-input');
+      const err = document.getElementById('pw-error-msg');
+      if (!pendingLoginDoctor) return;
+      const correct = DOCTOR_PASSWORDS[pendingLoginDoctor];
+      if (input && input.value === correct) {
+        err.textContent = '';
+        const name = pendingLoginDoctor;
+        pendingLoginDoctor = null;
+        document.getElementById('password-screen').style.display = 'none';
+        selectDoctor(name);
+      } else {
+        if (err) err.textContent = 'Incorrect password. Please try again.';
+        if (input) { input.value = ''; input.focus(); }
+        const box = document.querySelector('#password-screen .lock-box');
+        if (box) {
+          box.classList.remove('shake');
+          void box.offsetWidth;
+          box.classList.add('shake');
+        }
+      }
+    }
+
     function selectDoctor(name) {
       selectedDoctor = name;
       localStorage.setItem('pt_selected_doctor', name);
       document.getElementById('doctor-screen').style.display = 'none';
+      document.getElementById('password-screen').style.display = 'none';
       document.querySelector('.app-container').style.display = 'grid';
       updateDoctorDisplay();
       formData.sig_therapist = name;
@@ -4774,7 +4956,7 @@
       document.getElementById('doctor-screen').style.display = 'flex';
       document.getElementById('doctor-screen').style.zIndex = '10000';
       document.querySelectorAll('.doctor-option').forEach(opt => {
-        const name = opt.getAttribute('onclick').match(/selectDoctor\('(.+)'\)/);
+        const name = opt.getAttribute('onclick').match(/selectDoctorForLogin\('(.+)'\)/);
         const check = opt.querySelector('.doc-check');
         if(name && name[1] === selectedDoctor) {
           opt.style.borderColor = '#FF6900';
