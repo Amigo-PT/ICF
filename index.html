@@ -1109,6 +1109,150 @@
     }
     .btn-remove-problem:hover { background: #DC2626; color: #fff; }
 
+    /* InBody Report Gallery (Xiaomi Mi Style) */
+    .inbody-actions { display: flex; justify-content: center; margin-top: 2px; }
+    .inbody-gallery {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 14px; row-gap: 18px;
+    }
+    .inbody-tile {
+      position: relative; overflow: hidden;
+      background: var(--card-bg);
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      transition: all 0.25s var(--ease);
+    }
+    .inbody-tile:hover { border-color: rgba(255,105,0,0.40); box-shadow: 0 8px 22px rgba(23,23,23,0.10); transform: translateY(-2px); }
+    .inbody-thumb {
+      display: block; width: 100%; aspect-ratio: 3 / 4;
+      object-fit: contain; cursor: zoom-in; background: var(--gray-50);
+    }
+    .inbody-page-badge {
+      position: absolute; top: 8px; left: 8px; z-index: 1;
+      font-size: 10.5px; font-weight: 700; color: var(--primary);
+      background: var(--primary-light);
+      border-radius: 999px; padding: 2px 9px;
+      box-shadow: 0 1px 5px rgba(255,105,0,0.20);
+    }
+    .inbody-tile-meta {
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 5px 8px;
+      background: var(--card-bg);
+    }
+    .inbody-tile-del {
+      flex: none; width: 26px; height: 26px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; border-radius: 999px; cursor: pointer;
+      color: var(--gray-400); background: transparent;
+      font-size: 15px; line-height: 1; transition: all 0.18s;
+      padding: 0;
+    }
+    .inbody-tile-del:hover { color: #fff; background: var(--danger); }
+    .inbody-tile-caption { padding: 0 10px 10px; font-size: 11px; color: var(--secondary-label); }
+
+    /* Lightbox viewer (Xiaomi Mi Style) */
+    .inbody-lightbox {
+      position: fixed; inset: 0; z-index: 100000;
+      background: rgba(15,15,15,0.94);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      animation: fadeIn 0.2s; outline: none;
+    }
+    .inbody-lightbox-top {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 14px 16px; color: #fff;
+    }
+    .inbody-lightbox-close {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px;
+      border-radius: 999px; cursor: pointer;
+      background: rgba(23,23,23,0.45); color: #fff; font-size: 20px;
+      border: 1px solid rgba(255,255,255,0.14); line-height: 1;
+      transition: all 0.2s;
+    }
+    .inbody-lightbox-close:hover { background: var(--primary); border-color: var(--primary); transform: scale(1.06); }
+    .inbody-lightbox-stage {
+      position: relative; width: 100%; max-width: 920px;
+      display: flex; align-items: center; justify-content: center;
+      flex: 1;
+    }
+    .inbody-lightbox-stage img {
+      display: block; max-width: 100%; max-height: 82vh; object-fit: contain;
+      border-radius: 8px;
+      animation: inbodySlideIn 0.25s var(--ease);
+    }
+    @keyframes inbodySlideIn {
+      from { opacity: 0.4; transform: scale(0.985); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .inbody-lightbox-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; border-radius: 999px; cursor: pointer;
+      background: rgba(255,255,255,0.12); color: #fff; font-size: 22px;
+      backdrop-filter: blur(4px);
+      transition: all 0.2s;
+    }
+    .inbody-lightbox-arrow:hover { background: var(--primary); transform: translateY(-50%) scale(1.06); }
+    .inbody-lightbox-arrow.prev { left: 14px; }
+    .inbody-lightbox-arrow.next { right: 14px; }
+    .inbody-lightbox-counter {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      font-size: 12px; font-weight: 700; color: #fff;
+      background: rgba(23,23,23,0.55);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px; padding: 5px 14px;
+      backdrop-filter: blur(6px);
+    }
+
+    /* Duplicate picker modal */
+    .inbody-dup-group { margin-bottom: 18px; }
+    .inbody-dup-name {
+      font-size: 12px; font-weight: 700; color: var(--label);
+      background: var(--warning-bg); color: var(--warning);
+      display: inline-block; padding: 3px 10px; border-radius: 999px;
+      margin-bottom: 10px; max-width: 100%;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .inbody-dup-row {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px;
+    }
+    .inbody-dup-option {
+      position: relative; display: block; cursor: pointer; border-radius: 12px;
+      overflow: hidden; border: 2px solid var(--gray-200);
+      transition: all 0.2s var(--ease); background: var(--card-bg);
+    }
+    .inbody-dup-option:hover { border-color: var(--primary-soft); }
+    .inbody-dup-option input { display: none; }
+    .inbody-dup-option:has(input:checked) { border-color: var(--primary); box-shadow: 0 4px 14px rgba(255,105,0,0.22); }
+    .inbody-dup-option img {
+      display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; background: var(--gray-100);
+    }
+    .inbody-dup-option:has(input:checked) img { opacity: 0.97; }
+    .inbody-dup-badge {
+      position: absolute; top: 6px; left: 6px; z-index: 1;
+      font-size: 10px; font-weight: 700; color: var(--warning);
+      background: #fff; border-radius: 999px; padding: 1px 7px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .inbody-dup-check {
+      position: absolute; top: 6px; right: 6px; z-index: 1;
+      display: none; align-items: center; justify-content: center;
+      width: 20px; height: 20px; border-radius: 999px;
+      background: var(--primary); color: #fff; font-size: 13px; font-weight: 800;
+    }
+    .inbody-dup-option:has(input:checked) .inbody-dup-check { display: inline-flex; }
+
+    @media (max-width: 600px) {
+      .inbody-gallery { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; row-gap: 16px; }
+      .inbody-lightbox-arrow { width: 38px; height: 38px; }
+      .inbody-lightbox-arrow.prev { left: 6px; }
+      .inbody-lightbox-arrow.next { right: 6px; }
+    }
+
     /* Checkbox Group */
     .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; }
     .checkbox-label {
@@ -1222,6 +1366,15 @@
       width: 36px; height: 5px;
       background: var(--gray-300);
       border-radius: 3px; margin: 0 auto 16px;
+    }
+    .modal-overlay-center {
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-overlay-center .modal-content {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--gray-200);
+      border-bottom: none;
     }
     .patient-item {
       padding: 14px 16px; border-radius: var(--radius);
@@ -1733,6 +1886,7 @@
       {id:'environment',label:'Environment'},
       {id:'msk-exam',label:'MSK Exam'},
       {id:'obesity',label:'Obesity'},
+      {id:'inbody',label:'InBody'},
       {id:'labs',label:'Labs'},
       {id:'outcomes',label:'Outcomes'},
       {id:'24h',label:'24h Record'},
@@ -1753,7 +1907,7 @@
     let activePatientCaseId = null;
 
     // Fields that persist across evaluations (static patient data)
-    const STATIC_FIELDS = ['name','case_id','caseId','dob','sex','marital','education','dominant_hand','occupation','referral','diagnoses','msk_condition','obesity_class','chief_complaint','onset','sig_therapist','sig_date','sessions','sessions_from','sessions_to','sess_day_0','sess_day_1','sess_day_2','sess_day_3','sess_day_4','sess_day_5','sess_day_6','problem_count','stg_count','ltg_count'];
+    const STATIC_FIELDS = ['name','case_id','caseId','dob','sex','marital','education','dominant_hand','occupation','referral','diagnoses','msk_condition','obesity_class','chief_complaint','onset','sig_therapist','sig_date','sessions','sessions_from','sessions_to','sess_day_0','sess_day_1','sess_day_2','sess_day_3','sess_day_4','sess_day_5','sess_day_6','problem_count','stg_count','ltg_count','inbody_images'];
 
     function isStaticField(key) {
       if (STATIC_FIELDS.includes(key)) return true;
@@ -2533,11 +2687,13 @@
         console.warn('No active patient caseId found for cloud sync.');
         return Promise.resolve();
       }
+      const payloadData = deepClone(formData);
+      delete payloadData.inbody_images;
       const payload = {
         'case_id': currentCaseId,
         'name': formData.name || 'Anonymous',
         'date': new Date().toISOString(),
-        'jsonData': JSON.stringify(formData)
+        'jsonData': JSON.stringify(payloadData)
       };
       return fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
@@ -2606,6 +2762,18 @@
             date: item.date || new Date().toISOString(),
             data: JSON.stringify(item)
           };
+          let mergedData = item;
+          try {
+            const existingLocal = await dbGetPatient(caseId);
+            if (existingLocal && existingLocal.data) {
+              const parsed = JSON.parse(existingLocal.data);
+              if (parsed.inbody_images && parsed.inbody_images.length) {
+                mergedData = deepClone(item);
+                mergedData.inbody_images = parsed.inbody_images;
+                patientRecord.data = JSON.stringify(mergedData);
+              }
+            }
+          } catch(e) {}
           try { await dbPutPatient(patientRecord); addedCount++; } catch(e) {}
           updatePullProgress({ phase: 'process', percent: 25 + (range * addedCount), title: `Downloading Records... (${addedCount}/${total})`, subtitle: `Saving patient "${patientRecord.name}" locally.` });
         }
@@ -2692,8 +2860,10 @@
           try {
             const parsedData = JSON.parse(patient.data);
             if (!parsedData.case_id && !parsedData.name) continue;
+            const uploadData = deepClone(parsedData);
+            delete uploadData.inbody_images;
             const params = new URLSearchParams();
-            params.append('jsonData', JSON.stringify(parsedData));
+            params.append('jsonData', JSON.stringify(uploadData));
             await fetch(GOOGLE_SCRIPT_URL, {
               method: "POST",
               body: params,
@@ -2945,6 +3115,7 @@
           ${buildEnvironment()}
           ${buildMSKExam()}
           ${buildObesity()}
+          ${buildInBody()}
           ${buildLabs()}
           ${buildOutcomes()}
           ${build24h()}
@@ -3685,6 +3856,278 @@
           </table>
         </div>
       </div>`;
+    }
+
+    function buildInBody() {
+      return `<div class="section" id="sec-inbody">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">InBody Report</div>
+            <span class="card-badge badge-icf">Body Composition</span>
+          </div>
+          <div class="inbody-actions">
+            <button type="button" class="btn-add-problem" onclick="document.getElementById('inbody-file').click()">+ Add photos</button>
+          </div>
+          <input type="file" id="inbody-file" accept="image/*" multiple style="display:none" onchange="addInBodyImages(this.files)">
+          <div id="inbody-images-wrap" style="margin-top:12px">${renderInBodyImages()}</div>
+        </div>
+      </div>`;
+    }
+
+    function renderInBodyImages() {
+      const images = formData.inbody_images || [];
+      if (images.length === 0) {
+        return '';
+      }
+      return `
+        <div class="inbody-gallery">
+          ${images.map((img, i) => `
+            <div class="inbody-tile">
+              <span class="inbody-page-badge">${i + 1} / ${images.length}</span>
+              <img class="inbody-thumb" src="${img.dataUrl}" alt="${escAttr(img.name)}" onclick="openInBodyLightbox(${i})" onerror="this.closest('.inbody-tile').style.display='none'">
+              <div class="inbody-tile-meta">
+                <button type="button" class="inbody-tile-del" onclick="removeInBodyImage(${i})" title="Delete">×</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>`;
+    }
+
+    function escHtml(str) {
+      return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function escAttr(str) {
+      return escHtml(str);
+    }
+
+    function addInBodyImages(files) {
+      if (!files || files.length === 0) return;
+      if (!formData.inbody_images) formData.inbody_images = [];
+      let pending = 0;
+      let addedCount = 0;
+      for (const file of Array.from(files)) {
+        if (!file.type || !file.type.startsWith('image/')) continue;
+        pending++;
+        compressImage(file, 1400, 0.82)
+          .then(dataUrl => {
+            formData.inbody_images.push({
+              id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+              name: file.name,
+              dataUrl: dataUrl,
+              addedAt: new Date().toISOString()
+            });
+            addedCount++;
+            pending--;
+            if (pending === 0) {
+              document.getElementById('inbody-file').value = '';
+              document.getElementById('inbody-images-wrap').innerHTML = renderInBodyImages();
+              autoSave();
+              updateProgress();
+              const dupWarnings = checkInBodyDuplicateNames();
+              if (dupWarnings.length) {
+                openInBodyDupModal();
+              } else {
+                showNotification(addedCount + ' InBody image' + (addedCount > 1 ? 's' : '') + ' added', 'success');
+              }
+            }
+          })
+          .catch(() => {
+            pending--;
+            if (pending === 0) showNotification('Failed to process one or more images', 'error');
+          });
+      }
+      if (pending === 0) showNotification('No valid image files selected', 'warning');
+    }
+
+    function compressImage(file, maxSize, quality) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('read error'));
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onerror = () => reject(new Error('decode error'));
+          img.onload = () => {
+            let { width, height } = img;
+            if (width > maxSize || height > maxSize) {
+              const scale = maxSize / Math.max(width, height);
+              width = Math.round(width * scale);
+              height = Math.round(height * scale);
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, width, height);
+            ctx.drawImage(img, 0, 0, width, height);
+            let dataUrl;
+            try {
+              dataUrl = canvas.toDataURL('image/jpeg', quality);
+            } catch(err) {
+              dataUrl = canvas.toDataURL('image/jpeg');
+            }
+            if (!dataUrl || dataUrl.length < 100) { reject(new Error('encode error')); return; }
+            resolve(dataUrl);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    let _inbodyLightboxIndex = 0;
+
+    function showInBodyLightboxSlide() {
+      const overlay = document.getElementById('inbody-lightbox');
+      if (!overlay) return;
+      const imgs = formData.inbody_images || [];
+      const img = imgs[_inbodyLightboxIndex];
+      if (!img) { overlay.remove(); return; }
+      overlay.innerHTML = `
+        <div class="inbody-lightbox-top">
+          <span style="flex:1"></span>
+          <button type="button" class="inbody-lightbox-close" onclick="document.getElementById('inbody-lightbox').remove()">×</button>
+        </div>
+        <div class="inbody-lightbox-stage">
+          ${_inbodyLightboxIndex > 0 ? `<button type="button" class="inbody-lightbox-arrow prev" onclick="prevInBodySlide()">‹</button>` : ''}
+          <img src="${img.dataUrl}" alt="${escAttr(img.name)}">
+          ${_inbodyLightboxIndex < imgs.length - 1 ? `<button type="button" class="inbody-lightbox-arrow next" onclick="nextInBodySlide()">›</button>` : ''}
+        </div>
+        <div class="inbody-lightbox-counter">${_inbodyLightboxIndex + 1} / ${imgs.length}</div>`;
+      overlay.focus();
+    }
+
+    function openInBodyLightbox(index) {
+      const imgs = formData.inbody_images || [];
+      if (index < 0 || index >= imgs.length) return;
+      _inbodyLightboxIndex = index;
+      const existing = document.getElementById('inbody-lightbox');
+      if (existing) existing.remove();
+      const overlay = document.createElement('div');
+      overlay.id = 'inbody-lightbox';
+      overlay.className = 'inbody-lightbox';
+      overlay.setAttribute('tabindex', '-1');
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+      overlay.onkeydown = (e) => {
+        if (e.key === 'ArrowRight') nextInBodySlide();
+        else if (e.key === 'ArrowLeft') prevInBodySlide();
+        else if (e.key === 'Escape') overlay.remove();
+      };
+      document.body.appendChild(overlay);
+      showInBodyLightboxSlide();
+    }
+
+    function nextInBodySlide() {
+      const imgs = formData.inbody_images || [];
+      if (_inbodyLightboxIndex < imgs.length - 1) _inbodyLightboxIndex++;
+      showInBodyLightboxSlide();
+    }
+
+    function prevInBodySlide() {
+      if (_inbodyLightboxIndex > 0) _inbodyLightboxIndex--;
+      showInBodyLightboxSlide();
+    }
+
+    function removeInBodyImage(index) {
+      const images = formData.inbody_images || [];
+      if (index < 0 || index >= images.length) return;
+      images.splice(index, 1);
+      if (images.length === 0) formData.inbody_images = [];
+      const wrap = document.getElementById('inbody-images-wrap');
+      if (wrap) wrap.innerHTML = renderInBodyImages();
+      autoSave();
+      updateProgress();
+      showNotification('Image removed', 'info');
+    }
+
+    function checkInBodyDuplicateNames() {
+      const images = formData.inbody_images || [];
+      const byName = {};
+      images.forEach((img, i) => {
+        const key = String(img.name || '').trim().toLowerCase();
+        if (!key) return;
+        if (!byName[key]) byName[key] = [];
+        byName[key].push(i);
+      });
+      const warnings = [];
+      for (const indices of Object.values(byName)) {
+        if (indices.length < 2) continue;
+        const name = (images[indices[0]].name || '').trim();
+        const joined = indices.map(idx => idx + 1).join(indices.length === 2 ? ' & ' : ', ');
+        warnings.push(`"${name}" (pages ${joined})`);
+      }
+      return warnings;
+    }
+
+    function groupInBodyDuplicates() {
+      const images = formData.inbody_images || [];
+      const byName = {};
+      images.forEach((img, i) => {
+        const key = String(img.name || '').trim().toLowerCase();
+        if (!key) return;
+        if (!byName[key]) byName[key] = [];
+        byName[key].push(i);
+      });
+      return Object.values(byName)
+        .filter(inds => inds.length >= 2)
+        .map(inds => ({ name: (images[inds[0]].name || '').trim(), indexes: inds }));
+    }
+
+    function openInBodyDupModal() {
+      const groups = groupInBodyDuplicates();
+      if (groups.length === 0) return;
+      const existing = document.getElementById('inbody-dup-modal');
+      if (existing) existing.remove();
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay modal-overlay-center';
+      overlay.id = 'inbody-dup-modal';
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+      overlay.innerHTML = `
+        <div class="modal-content">
+          <div style="font-size:17px;font-weight:700;color:var(--label);margin-bottom:4px">Duplicate image names found</div>
+          <div style="font-size:12.5px;color:var(--secondary-label);margin-bottom:18px">Some photos share the same file name. Pick one to keep from each duplicate group — the rest will be removed.</div>
+          ${groups.map((g, gi) => `
+            <div class="inbody-dup-group">
+              <div class="inbody-dup-name">${escHtml(g.name)}</div>
+              <div class="inbody-dup-row">
+                ${g.indexes.map((idx, ii) => `
+                  <label class="inbody-dup-option">
+                    <input type="radio" name="inbody_dup_${gi}" value="${idx}" ${ii === 0 ? 'checked' : ''}>
+                    <span class="inbody-dup-badge">P.${idx + 1}</span>
+                    <span class="inbody-dup-check">✓</span>
+                    <img src="${formData.inbody_images[idx].dataUrl}" alt="${escAttr(formData.inbody_images[idx].name)}">
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+          <div style="display:flex;gap:10px;margin-top:22px">
+            <button type="button" class="btn btn-outline" style="flex:1" onclick="this.closest('.modal-overlay').remove()">Keep everything</button>
+            <button type="button" class="btn btn-primary" style="flex:1" onclick="confirmInBodyDupSelection()">Keep selected</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+
+    function confirmInBodyDupSelection() {
+      const overlay = document.getElementById('inbody-dup-modal');
+      if (!overlay) return;
+      const groups = groupInBodyDuplicates();
+      const removeIdx = new Set();
+      groups.forEach((g, gi) => {
+        const checked = overlay.querySelector(`input[name="inbody_dup_${gi}"]:checked`);
+        const keep = checked ? parseInt(checked.value) : g.indexes[0];
+        g.indexes.forEach(idx => { if (idx !== keep) removeIdx.add(idx); });
+      });
+      overlay.remove();
+      if (removeIdx.size === 0) return;
+      formData.inbody_images = (formData.inbody_images || []).filter((_, idx) => !removeIdx.has(idx));
+      autoSave();
+      updateProgress();
+      const wrap = document.getElementById('inbody-images-wrap');
+      if (wrap) wrap.innerHTML = renderInBodyImages();
+      showNotification(removeIdx.size + ' duplicate image' + (removeIdx.size > 1 ? 's' : '') + ' removed', 'warning');
     }
 
     function buildLabs() {
